@@ -1,6 +1,8 @@
+import "../../styles/detail.scss";
+
 const Detail = () => {
   return (
-    <div className="">Detalle</div>
+    <div className="detail">Detalle</div>
   )
 }
 

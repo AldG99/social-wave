@@ -1,0 +1,32 @@
+.userInfo {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .avatar {
+      font-size: 5rem; /* Ajusta el tamaño del icono */
+      color: #ffffff; /* Ajusta el color del icono */
+    }
+  }
+
+  .icons {
+    display: flex;
+    gap: 20px;
+
+    .icon {
+      font-size: 1.5rem; /* Ajusta el tamaño de los iconos */
+      color: #ffffff; /* Ajusta el color de los iconos */
+      cursor: pointer;
+
+      &:hover {
+        color: #000; /* Cambia el color al pasar el ratón sobre el icono */
+      }
+    }
+  }
+}

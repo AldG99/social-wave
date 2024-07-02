@@ -1,0 +1,40 @@
+.chatList {
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+
+    .searchBar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      padding: 2px 10px;
+      border-radius: 20px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+      .searchIcon {
+        font-size: 0.85rem; /* Ajusta el tamaño del icono */
+        color: #888; /* Ajusta el color del icono */
+      }
+
+      input {
+        border: none;
+        outline: none;
+        margin-left: 10px;
+        flex-grow: 1;
+      }
+    }
+
+    .addIcon {
+      font-size: 0.85rem; /* Ajusta el tamaño del icono */
+      color: #ffffff; /* Ajusta el color del icono */
+      cursor: pointer;
+
+      &:hover {
+        color: #000; /* Cambia el color al pasar el ratón sobre el icono */
+      }
+    }
+  }
+}
