@@ -1,4 +1,7 @@
 .chatList {
+  flex: 1;
+  overflow: scroll;
+
   .search {
     display: flex;
     align-items: center;
@@ -35,6 +38,34 @@
       &:hover {
         color: #000; /* Cambia el color al pasar el ratón sobre el icono */
       }
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+
+    .avatar {
+      font-size: 2.5rem;
+    }
+
+    .texts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    span {
+      font-weight: 500;
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 300;
     }
   }
 }

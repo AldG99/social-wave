@@ -1,5 +1,5 @@
 import "../../styles/list.scss";
-import ChatList from "./chatList/charList";
+import ChatList from "./chatList/chatList";
 import UserInfo from "./userInfo/userInfo";
 
 const List = () => {
