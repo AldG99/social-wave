@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSearch, FaPlus, FaMinus, FaUserCircle } from 'react-icons/fa'; // Importa los iconos necesarios
+import { FaSearch, FaPlus, FaMinus, FaUserCircle } from "react-icons/fa"; // Importa los iconos necesarios
 import "../../../styles/chatList.scss"
 
 const ChatList = () => {
@@ -21,42 +21,28 @@ const ChatList = () => {
       <div className="item">
         <FaUserCircle className="avatar" />
         <div className="texts">
-          <span>Harley Quinn</span>
+          <span>John Connor</span>
           <p>Hola!</p>
         </div>
       </div>
       <div className="item">
         <FaUserCircle className="avatar" />
         <div className="texts">
-          <span>Jon Snow</span>
+          <span>Alicia Kingsleigh</span>
           <p>Hola!</p>
         </div>
       </div>
       <div className="item">
         <FaUserCircle className="avatar" />
         <div className="texts">
-          <span>Natasha Romanoff</span>
+          <span>Will Smith</span>
           <p>Hola!</p>
         </div>
       </div>
       <div className="item">
         <FaUserCircle className="avatar" />
         <div className="texts">
-          <span>Harley Quinn</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Jon Snow</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Natasha Romanoff</span>
+          <span>Newt Scamander</span>
           <p>Hola!</p>
         </div>
       </div>
@@ -64,6 +50,13 @@ const ChatList = () => {
         <FaUserCircle className="avatar" />
         <div className="texts">
           <span>Harley Quinn</span>
+          <p>Hola!</p>
+        </div>
+      </div>
+      <div className="item">
+        <FaUserCircle className="avatar" />
+        <div className="texts">
+          <span>Mike Wazowski</span>
           <p>Hola!</p>
         </div>
       </div>

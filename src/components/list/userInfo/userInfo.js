@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCircle, FaEllipsisH, FaVideo, FaEdit } from 'react-icons/fa'; // Importa los iconos
+import { FaUserCircle, FaEllipsisH, FaVideo, FaEdit } from "react-icons/fa"; // Importa los iconos
 import "../../../styles/userInfo.scss";
 
 const UserInfo = () => {

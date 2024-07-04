@@ -1,3 +1,93 @@
 .detail {
   flex: 1;
+
+  .user {
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #ddd;
+
+    .avatar {
+      font-size: 2.5em;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    .option {
+
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .arrowIcon {
+          cursor: pointer;
+        }
+      }
+
+      .photos {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+
+        .photoItem {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .photoDetail {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            img {
+              width: 40px;
+              height: 40px;
+              border-radius: 5px;
+              object-fit: cover;
+            }
+
+            span {
+              font-size: 14px;
+              color: lightgray;
+              font-weight: 300;
+            }
+          }
+
+          .downloadIcon {
+            font-size: 1em;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    button {
+      padding: 15px;
+      background-color: #c96457;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #a7564b;
+      }
+
+      &.logout {
+        padding: 10px;
+        background-color: #428eff;
+      }
+    }
+  }
 }

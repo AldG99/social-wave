@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import { FaUserCircle, FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from 'react-icons/fa'; // Importa los iconos necesarios
+import React, { useEffect, useState, useRef } from "react";
+import { FaUserCircle, FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa"; // Importa los iconos necesarios
 import EmojiPicker from "emoji-picker-react";
 import "../../styles/chat.scss";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+
+  const endRef = useRef(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({behavior: "smooth" })
+  }, [])
 
   const handleEmoji = e => {
     setText((prev) => prev + e.emoji);
@@ -18,8 +24,8 @@ const Chat = () => {
         <div className="user">
           <FaUserCircle className="avatar" />
           <div className="texts">
-            <span>Harley Quinn</span>
-            <p>¡Tú eras el Elegido! ¡Se suponía que destruirías a los Sith, no que te unieras a ellos! ¡Traerías el equilibrio a la Fuerza, no que la dejaras en la oscuridad!</p>
+            <span>John Connor</span>
+            <p>Somos nosotros contra las máquinas.</p>
           </div>
         </div>
         <div className="icons">
@@ -32,7 +38,7 @@ const Chat = () => {
         <div className="message">
           <FaUserCircle className="avatar" />
           <div className="texts">
-            <p>Hola!!!</p>
+            <p>¡Tú eras el Elegido! ¡Se suponía que destruirías a los Sith, no que te unieras a ellos! ¡Traerías el equilibrio a la Fuerza, no que la dejaras en la oscuridad!</p>
             <span>Hace 1 minuto</span>
           </div>
         </div>
@@ -69,6 +75,7 @@ const Chat = () => {
             <span>Hace 1 minuto</span>
           </div>
         </div>
+        <div ref={endRef}></div>
       </div>
       <div className="buttom">
         <div className="icons">
