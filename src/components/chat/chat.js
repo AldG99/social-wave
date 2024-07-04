@@ -28,7 +28,48 @@ const Chat = () => {
           <FaInfoCircle className="icon" />
         </div>
       </div>
-      <div className="center"></div>
+      <div className="center">
+        <div className="message">
+          <FaUserCircle className="avatar" />
+          <div className="texts">
+            <p>Hola!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>Hola!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+        <div className="message">
+          <FaUserCircle className="avatar" />
+          <div className="texts">
+            <p>Hola!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <p>Hola!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+        <div className="message">
+          <FaUserCircle className="avatar" />
+          <div className="texts">
+            <p>Hola!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+        <div className="message own">
+          <div className="texts">
+            <img className='imagen' src={require("../../images/ola.jpg")} alt="" />
+            <p>Holaaaaaaaaaaaaa!!!</p>
+            <span>Hace 1 minuto</span>
+          </div>
+        </div>
+      </div>
       <div className="buttom">
         <div className="icons">
           <FaImage className="icon" />
