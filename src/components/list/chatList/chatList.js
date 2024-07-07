@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch, FaPlus, FaMinus, FaUserCircle } from "react-icons/fa"; // Importa los iconos necesarios
 import "../../../styles/chatList.scss"
+import AddUser from "../../addUser/addUser";
 
 const ChatList = () => {
   const [addMode, setAddMode] = useState(false);
@@ -74,6 +75,7 @@ const ChatList = () => {
           <p>Hola!</p>
         </div>
       </div>
+      {addMode && <AddUser />}
     </div>
   )
 }

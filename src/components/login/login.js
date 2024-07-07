@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import "../../styles/login.scss";
 
 const Login = () => {
@@ -37,8 +37,13 @@ const Login = () => {
         <h2>Bienvenido de nuevo</h2>
         <form>
           <label htmlFor="file">
-            <img src={avatar.url || "./avatar.png"} alt="" />
-            Subir una imagen</label>
+           {avatar.url ? (
+              <img src={avatar.url} alt="Avatar" />
+            ) : (
+              <FaUserCircle className="avatarIcon" />
+            )}
+            Subir una imagen
+          </label>
           <input type="file" id="file" style={{display:"none"}} onChange={handleAvatar} />
           <input type="text" placeholder="Nombre de usuario" name="username" />
           <input type="text" placeholder="Correo Electrónico" name="email" />
