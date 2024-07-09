@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "../../styles/login.scss";
 import { toast } from "react-toastify";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../lib/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
@@ -30,7 +30,7 @@ const Login = () => {
 
     const formData = new FormData(e.target);
 
-    const {username, email, password} = Object.fromEntries(formData);
+    const { username, email, password } = Object.fromEntries(formData);
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -58,8 +58,22 @@ const Login = () => {
     }
   };
 
-  const handleLogin = e => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.target);
+    const { email, password } = Object.fromEntries(formData);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch(err) {
+      console.log(err)
+      toast.error(err.message)
+    }
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
