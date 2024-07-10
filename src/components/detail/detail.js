@@ -1,6 +1,7 @@
 import React from "react";
 import { FaUserCircle, FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa"; // Importa los iconos necesarios
 import "../../styles/detail.scss";
+import { auth } from "../../lib/firebaseConfig";
 
 const Detail = () => {
   return (
@@ -11,12 +12,6 @@ const Detail = () => {
         <p>Somos nosotros contra las máquinas.</p>
       </div>
       <div className="info">
-        <div className="option">
-          <div className="title">
-            <span>Configuración del Chat</span>
-            <FaArrowUp className="arrowIcon" />
-          </div>
-        </div>
         <div className="option">
           <div className="title">
             <span>Configuración del Chat</span>
@@ -42,27 +37,7 @@ const Detail = () => {
               </div>
               <FaDownload className="downloadIcon" />
             </div>
-            <div className="photoItem">
-              <div className="photoDetail">
-                <img className="imagen" src={require("../../images/edificio.jpg")} alt="" />
-                <span>photo_2024_2.png</span>
-              </div>
-              <FaDownload className="downloadIcon" />
-            </div>
-            <div className="photoItem">
-              <div className="photoDetail">
-                <img className="imagen" src={require("../../images/edificio.jpg")} alt="" />
-                <span>photo_2024_2.png</span>
-              </div>
-              <FaDownload className="downloadIcon" />
-            </div>
-            <div className="photoItem">
-              <div className="photoDetail">
-                <img className="imagen" src={require("../../images/edificio.jpg")} alt="" />
-                <span>photo_2024_2.png</span>
-              </div>
-              <FaDownload className="downloadIcon" />
-            </div>
+            {/* Repetir para más fotos */}
           </div>
         </div>
         <div className="option">
@@ -72,10 +47,10 @@ const Detail = () => {
           </div>
         </div>
         <button>Bloquear usuario</button>
-        <button className="logout">Salir</button>
+        <button className="logout" onClick={() => auth.signOut()}>Salir</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Detail;

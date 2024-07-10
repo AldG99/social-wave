@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch, FaPlus, FaMinus, FaUserCircle } from "react-icons/fa"; // Importa los iconos necesarios
-import "../../../styles/chatList.scss"
+import "../../../styles/chatList.scss";
 import AddUser from "../../addUser/addUser";
 
 const ChatList = () => {
@@ -26,58 +26,9 @@ const ChatList = () => {
           <p>Hola!</p>
         </div>
       </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Alicia Kingsleigh</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Will Smith</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Newt Scamander</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Harley Quinn</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Mike Wazowski</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Jon Snow</span>
-          <p>Hola!</p>
-        </div>
-      </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>Natasha Romanoff</span>
-          <p>Hola!</p>
-        </div>
-      </div>
       {addMode && <AddUser />}
     </div>
-  )
-}
+  );
+};
 
 export default ChatList;

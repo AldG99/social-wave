@@ -1,13 +1,18 @@
 import React from "react";
-import { FaUserCircle, FaEllipsisH, FaVideo, FaEdit } from "react-icons/fa"; // Importa los iconos
+import { useUserStore } from "../../../lib/userStore";
+import { FaEllipsisH, FaVideo, FaEdit } from "react-icons/fa"; // Importa los iconos
 import "../../../styles/userInfo.scss";
 
 const UserInfo = () => {
+  const { currentUser } = useUserStore();
+
+  console.log("currentUser:", currentUser); // Verifica los datos obtenidos
+
   return (
     <div className="userInfo">
       <div className="user">
-        <FaUserCircle className="avatar" />
-        <h2>Anakin Skywalker</h2>
+        <img src={require("../../../images/avatar.png")} alt="" />
+        <h2>{currentUser.username}</h2>
       </div>
       <div className="icons">
         <FaEllipsisH className="icon" />
@@ -15,7 +20,7 @@ const UserInfo = () => {
         <FaEdit className="icon" />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default UserInfo;

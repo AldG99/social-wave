@@ -9,9 +9,14 @@
     align-items: center;
     gap: 20px;
 
-    .avatar {
-      font-size: 5rem; /* Ajusta el tamaño del icono */
-      color: #ffffff; /* Ajusta el color del icono */
+    h2 {
+      margin-left: 10px;
+    }
+
+    img {
+      width: 50px; /* Ejemplo: ajusta el tamaño según sea necesario */
+      height: 50px;
+      border-radius: 50%; /* Para hacer la imagen redonda */
     }
   }
 
@@ -20,12 +25,12 @@
     gap: 20px;
 
     .icon {
-      font-size: 1.05rem; /* Ajusta el tamaño de los iconos */
-      color: #ffffff; /* Ajusta el color de los iconos */
+      font-size: 1.05rem;
+      color: #ffffff;
       cursor: pointer;
 
       &:hover {
-        color: #000; /* Cambia el color al pasar el ratón sobre el icono */
+        color: #000;
       }
     }
   }
