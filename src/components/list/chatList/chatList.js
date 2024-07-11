@@ -1,10 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch, FaPlus, FaMinus, FaUserCircle } from "react-icons/fa"; // Importa los iconos necesarios
 import "../../../styles/chatList.scss";
 import AddUser from "../../addUser/addUser";
+import { useUserStore } from "../../../lib/userStore";
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
+import { db } from "../../../lib/firebaseConfig";
 
 const ChatList = () => {
+  const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
+
+  const { currentUser } = useUserStore();
+
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async (res) => {
+      const items = res.data().chats;
+
+      const promises = items.map(async(item) => {
+        const userDocRef = doc(db, "users", item.receiverId);
+        const userDocSnap = await getDoc(userDocRef);
+
+        const user = userDocSnap.data();
+
+        return { ...item, user };
+      });
+
+      const chatData = await Promise.all(promises);
+
+      setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+    });
+
+    return () => {
+      unSub();
+    };
+  }, [currentUser.id]);
 
   return (
     <div className="chatList">
@@ -19,13 +48,15 @@ const ChatList = () => {
           <FaPlus className="addIcon" onClick={() => setAddMode((prev) => !prev)} />
         )}
       </div>
-      <div className="item">
-        <FaUserCircle className="avatar" />
-        <div className="texts">
-          <span>John Connor</span>
-          <p>Hola!</p>
+      {chats.map(chat => (
+        <div className="item" key={chat.chatId}>
+          <FaUserCircle className="avatar" />
+          <div className="texts">
+            <span>John Connor</span>
+            <p>{chat.lastMessage}</p>
+          </div>
         </div>
-      </div>
+      ))};
       {addMode && <AddUser />}
     </div>
   );
