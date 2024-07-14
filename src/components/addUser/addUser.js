@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
 import "../../styles/addUser.scss";
 import { db } from "../../lib/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -34,7 +33,7 @@ const AddUser = () => {
       </form>
       {user && <div className="user">
         <div className="detail">
-          <FaUserCircle className="avatar" />
+          <img src={user.avatar} alt="Avatar" />
           <span>{user.username}</span>
         </div>
         <button>Añadir Usuario</button>
