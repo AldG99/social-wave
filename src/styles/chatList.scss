@@ -61,9 +61,11 @@
       background-color: #f1f1f1;
     }
 
-    .avatar {
-      font-size: 2rem;
-      color: #6c757d;
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
     }
 
     .texts {

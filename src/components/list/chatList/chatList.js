@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaPlus, FaMinus, FaUserCircle } from "react-icons/fa"; // Importa los iconos necesarios
+import { FaSearch, FaPlus, FaMinus } from "react-icons/fa";
 import "../../../styles/chatList.scss";
 import AddUser from "../../addUser/addUser";
 import { useUserStore } from "../../../lib/userStore";
@@ -14,26 +14,31 @@ const ChatList = () => {
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async (res) => {
-      const items = res.data().chats;
-
-      const promises = items.map(async(item) => {
-        const userDocRef = doc(db, "users", item.receiverId);
-        const userDocSnap = await getDoc(userDocRef);
-
-        const user = userDocSnap.data();
-
-        return { ...item, user };
-      });
-
-      const chatData = await Promise.all(promises);
-
-      setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+      if (res.exists()) {
+        const items = res.data().chats || [];
+  
+        const promises = items.map(async(item) => {
+          const userDocRef = doc(db, "users", item.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
+  
+          const user = userDocSnap.data();
+  
+          return { ...item, user };
+        });
+  
+        const chatData = await Promise.all(promises);
+  
+        setChats(chatData.sort((a, b) => b.updateAt - a.updateAt));
+      } else {
+        console.log("No se encontraron chats para el usuario actual");
+        setChats([]);
+      }
     });
-
+  
     return () => {
       unSub();
     };
-  }, [currentUser.id]);
+  }, [currentUser.id]);  
 
   return (
     <div className="chatList">
@@ -50,9 +55,9 @@ const ChatList = () => {
       </div>
       {chats.map(chat => (
         <div className="item" key={chat.chatId}>
-          <FaUserCircle className="avatar" />
+          <img src={chat.user.avatar} alt="Avatar" />
           <div className="texts">
-            <span>John Connor</span>
+            <span>{chat.user.username}</span>
             <p>{chat.lastMessage}</p>
           </div>
         </div>
