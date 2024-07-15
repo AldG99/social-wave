@@ -2,8 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { FaUserCircle, FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa"; // Importa los iconos necesarios
 import EmojiPicker from "emoji-picker-react";
 import "../../styles/chat.scss";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../lib/firebaseConfig";
 
 const Chat = () => {
+  const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
 
@@ -11,7 +14,19 @@ const Chat = () => {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({behavior: "smooth" })
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", "RAqkOcn4tgcdeQ63jExe"), (res) => {
+      setChat(res.data())
+    })
+
+    return () => {
+      unSub();
+    }
+  }, []);
+
+  console.log(chat);
 
   const handleEmoji = e => {
     setText((prev) => prev + e.emoji);
