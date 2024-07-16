@@ -1,5 +1,5 @@
 import React from "react";
-import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa"; // Importa los iconos necesarios
+import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
 import "../../styles/detail.scss";
 import { auth } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
@@ -18,15 +18,9 @@ const Detail = () => {
     const userDocRef = doc(db, "users", currentUser.id);
 
     try {
-      if (isReceiverBlocked) {
-        await updateDoc(userDocRef, {
-          blocked: arrayRemove(user.id),
-        });
-      } else {
-        await updateDoc(userDocRef, {
-          blocked: arrayUnion(user.id),
-        });
-      }
+      await updateDoc(userDocRef, {
+        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
+      });
 
       changeBlock();
     } catch (err) {
@@ -79,10 +73,12 @@ const Detail = () => {
           {isCurrentUserBlocked
             ? "¡Estás bloqueado!"
             : isReceiverBlocked
-            ? "Desbloquear usuario"
+            ? "Usuario bloqueado"
             : "Bloquear usuario"}
         </button>
-        <button className="logout" onClick={() => auth.signOut()}>Salir</button>
+        <button className="logout" onClick={() => auth.signOut()}>
+          Salir
+        </button>
       </div>
     </div>
   );

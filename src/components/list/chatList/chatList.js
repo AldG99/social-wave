@@ -10,16 +10,17 @@ import { useChatStore } from "../../../lib/chatStore";
 const ChatList = () => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
+  const [input, setInput] = useState("");
 
   const { currentUser } = useUserStore();
-  const { chatId, changeChat } = useChatStore();
+  const { changeChat } = useChatStore();
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async (res) => {
       if (res.exists()) {
         const items = res.data().chats || [];
 
-        const promises = items.map(async(item) => {
+        const promises = items.map(async (item) => {
           const userDocRef = doc(db, "users", item.receiverId);
           const userDocSnap = await getDoc(userDocRef);
 
@@ -43,12 +44,12 @@ const ChatList = () => {
   }, [currentUser.id]);
 
   const handleSelect = async (chat) => {
-    const userChats = chats.map(item => {
-      const {user, ...rest} = item;
+    const userChats = chats.map((item) => {
+      const { user, ...rest } = item;
       return rest;
     });
 
-    const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId)
+    const chatIndex = userChats.findIndex((item) => item.chatId === chat.chatId);
 
     userChats[chatIndex].isSeen = true;
 
@@ -59,17 +60,19 @@ const ChatList = () => {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };
+
+  const filteredChats = chats.filter(c => c.user.username.toLowerCase().includes(input.toLowerCase()));
 
   return (
     <div className="chatList">
       <div className="search">
         <div className="searchBar">
           <FaSearch className="searchIcon" />
-          <input type="text" placeholder="Buscar" />
+          <input type="text" placeholder="Buscar" onChange={(e) => setInput(e.target.value)} />
         </div>
         {addMode ? (
           <FaMinus className="addIcon" onClick={() => setAddMode((prev) => !prev)} />
@@ -77,9 +80,21 @@ const ChatList = () => {
           <FaPlus className="addIcon" onClick={() => setAddMode((prev) => !prev)} />
         )}
       </div>
-      {chats.map(chat => (
-        <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)} style={{backgroundColor: chat?.isSeen ? "transparent" : "#5183fe",}}>
-          <img src={chat.user.blocked.includes(currentUser.id) ? "./avatar.png" : chat.user.avatar || "./avatar.png"} alt="Avatar" />
+      {filteredChats.map((chat) => (
+        <div
+          className="item"
+          key={chat.chatId}
+          onClick={() => handleSelect(chat)}
+          style={{ backgroundColor: chat?.isSeen ? "transparent" : "#5183fe" }}
+        >
+          <img
+            src={
+              chat.user.blocked.includes(currentUser.id)
+                ? "./avatar.png"
+                : chat.user.avatar || "./avatar.png"
+            }
+            alt="Avatar"
+          />
           <div className="texts">
             <span>{chat.user.blocked.includes(currentUser.id) ? "Usuario" : chat.user.username}</span>
             <p>{chat.lastMessage}</p>
