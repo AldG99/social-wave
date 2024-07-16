@@ -1,14 +1,44 @@
 import React from "react";
-import { FaUserCircle, FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa"; // Importa los iconos necesarios
+import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa"; // Importa los iconos necesarios
 import "../../styles/detail.scss";
 import { auth } from "../../lib/firebaseConfig";
+import { useChatStore } from "../../lib/chatStore";
+import { useUserStore } from "../../lib/userStore";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { db } from "../../lib/firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Detail = () => {
+  const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
+  const { currentUser } = useUserStore();
+
+  const handleBlock = async () => {
+    if (!user) return;
+
+    const userDocRef = doc(db, "users", currentUser.id);
+
+    try {
+      if (isReceiverBlocked) {
+        await updateDoc(userDocRef, {
+          blocked: arrayRemove(user.id),
+        });
+      } else {
+        await updateDoc(userDocRef, {
+          blocked: arrayUnion(user.id),
+        });
+      }
+
+      changeBlock();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="detail">
       <div className="user">
-        <FaUserCircle className="avatar" />
-        <h2>John Connor</h2>
+        <img src={user?.avatar} alt="Avatar" />
+        <h2>{user?.username}</h2>
         <p>Somos nosotros contra las máquinas.</p>
       </div>
       <div className="info">
@@ -37,7 +67,6 @@ const Detail = () => {
               </div>
               <FaDownload className="downloadIcon" />
             </div>
-            {/* Repetir para más fotos */}
           </div>
         </div>
         <div className="option">
@@ -46,7 +75,13 @@ const Detail = () => {
             <FaArrowUp className="arrowIcon" />
           </div>
         </div>
-        <button>Bloquear usuario</button>
+        <button onClick={handleBlock}>
+          {isCurrentUserBlocked
+            ? "¡Estás bloqueado!"
+            : isReceiverBlocked
+            ? "Desbloquear usuario"
+            : "Bloquear usuario"}
+        </button>
         <button className="logout" onClick={() => auth.signOut()}>Salir</button>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { FaSearch, FaPlus, FaMinus } from "react-icons/fa";
 import "../../../styles/chatList.scss";
 import AddUser from "../../addUser/addUser";
 import { useUserStore } from "../../../lib/userStore";
-import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore"; // Asegúrate de que todas las funciones provienen del mismo SDK
+import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebaseConfig";
 import { useChatStore } from "../../../lib/chatStore";
 
@@ -79,9 +79,9 @@ const ChatList = () => {
       </div>
       {chats.map(chat => (
         <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)} style={{backgroundColor: chat?.isSeen ? "transparent" : "#5183fe",}}>
-          <img src={chat.user.avatar} alt="Avatar" />
+          <img src={chat.user.blocked.includes(currentUser.id) ? "./avatar.png" : chat.user.avatar || "./avatar.png"} alt="Avatar" />
           <div className="texts">
-            <span>{chat.user.username}</span>
+            <span>{chat.user.blocked.includes(currentUser.id) ? "Usuario" : chat.user.username}</span>
             <p>{chat.lastMessage}</p>
           </div>
         </div>

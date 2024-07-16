@@ -20,9 +20,11 @@
       align-items: center;
       gap: 20px;
 
-      .avatar {
-        font-size: 3rem; // Ajustado para ser más responsivo
-        color: #6c757d;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
       }
 
       .texts {
@@ -149,6 +151,10 @@
       border: 1px solid #ddd;
       outline: none;
       font-size: 16px;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
 
     .emoji {
@@ -180,112 +186,9 @@
       border-radius: 5px;
       cursor: pointer;
 
-      &:hover {
-        background-color: #007acc;
-      }
-    }
-  }
-
-  // Media queries para hacer el chat responsivo
-  @media (max-width: 768px) {
-    .top {
-      padding: 10px;
-
-      .user {
-        gap: 10px;
-
-        .avatar {
-          font-size: 2.5rem;
-        }
-
-        .texts {
-          span {
-            font-size: 14px;
-          }
-
-          p {
-            font-size: 12px;
-          }
-        }
-      }
-
-      .icons {
-        .icon {
-          font-size: 1.25rem;
-        }
-      }
-    }
-
-    .center {
-      padding: 10px;
-
-      .message {
-        gap: 10px;
-      }
-    }
-
-    .bottom {
-      padding: 10px;
-      gap: 10px;
-
-      .icons {
-        gap: 5px;
-
-        .icon {
-          font-size: 1.25rem;
-        }
-      }
-
-      input {
-        padding: 8px;
-        font-size: 14px;
-      }
-
-      .sendButton {
-        padding: 8px 16px;
-      }
-    }
-  }
-
-  @media (max-width: 480px) {
-    .top {
-      .user {
-        .avatar {
-          font-size: 2rem;
-        }
-
-        .texts {
-          span {
-            font-size: 12px;
-          }
-
-          p {
-            font-size: 10px;
-          }
-        }
-      }
-
-      .icons {
-        .icon {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .bottom {
-      .icons {
-        .icon {
-          font-size: 1rem;
-        }
-      }
-
-      input {
-        font-size: 12px;
-      }
-
-      .sendButton {
-        padding: 6px 12px;
-        font-size: 14px;
+      &:disabled {
+        background-color: #0099ff;
+        cursor: not-allowed;
       }
     }
   }

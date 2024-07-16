@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FaUserCircle, FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa";
+import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import "../../styles/chat.scss";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -18,7 +18,7 @@ const Chat = () => {
   });
 
   const { currentUser } = useUserStore();
-  const { chatId, user } = useChatStore();
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
 
   const endRef = useRef(null);
 
@@ -49,7 +49,7 @@ const Chat = () => {
         url: URL.createObjectURL(file),
       });
     } else {
-      alert("Please select a valid image file.");
+      alert("Por favor, seleccione un archivo de imagen válido");
     }
   };
 
@@ -84,7 +84,7 @@ const Chat = () => {
             const chatIndex = userChatsData.chats.findIndex((c) => c.chatId === chatId);
 
             if (chatIndex !== -1) {
-              userChatsData.chats[chatIndex].lastMessage = text || "Image sent";
+              userChatsData.chats[chatIndex].lastMessage = text || "Imagen enviada";
               userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
               userChatsData.chats[chatIndex].updateAt = Date.now();
 
@@ -111,9 +111,9 @@ const Chat = () => {
     <div className="chat">
       <div className="top">
         <div className="user">
-          <FaUserCircle className="avatar" />
+          <img src={user?.avatar} alt="Avatar" />
           <div className="texts">
-            <span>John Connor</span>
+            <span>{user?.username}</span>
             <p>Somos nosotros contra las máquinas.</p>
           </div>
         </div>
@@ -146,18 +146,18 @@ const Chat = () => {
           <label htmlFor="file">
             <FaImage className="icon" />
           </label>
-          <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
+          <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} disabled={isCurrentUserBlocked || isReceiverBlocked}/>
           <FaCamera className="icon" />
           <FaMicrophone className="icon" />
         </div>
-        <input type="text" placeholder="Escribe un mensaje..." value={text} onChange={(e) => setText(e.target.value)} />
+        <input type="text" placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "No puedes enviar un mensaje" : "Escribe un mensaje..."} value={text} onChange={(e) => setText(e.target.value)} disabled={isCurrentUserBlocked || isReceiverBlocked} />
         <div className="emoji">
           <FaSmile className="emojiIcon" onClick={() => setOpen((prev) => !prev)} />
           <div className="picker">
             <EmojiPicker open={open} onEmojiClick={handleEmoji} />
           </div>
         </div>
-        <button className="sendButton" onClick={handleSend}>
+        <button className="sendButton" onClick={handleSend} disabled={isCurrentUserBlocked || isReceiverBlocked}>
           Enviar
         </button>
       </div>
