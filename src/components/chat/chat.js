@@ -6,11 +6,16 @@ import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firesto
 import { db } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
+import upload from "../../lib/upload";
 
 const Chat = () => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const [img, setImg] = useState({
+    file: null,
+    url: "",
+  });
 
   const { currentUser } = useUserStore();
   const { chatId, user } = useChatStore();
@@ -19,7 +24,7 @@ const Chat = () => {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [chat]);
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
@@ -36,15 +41,33 @@ const Chat = () => {
     setOpen(false);
   };
 
+  const handleImg = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImg({
+        file: file,
+        url: URL.createObjectURL(file),
+      });
+    } else {
+      alert("Please select a valid image file.");
+    }
+  };
+
   const handleSend = async () => {
-    if (text === "") return;
+    if (text === "" && !img.file) return;
+
+    let imgUrl = null;
 
     try {
+      if (img.file) {
+        imgUrl = await upload(img.file);
+      }
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
           text,
           createAt: new Date(),
+          ...(imgUrl && { img: imgUrl }),
         }),
       });
 
@@ -61,7 +84,7 @@ const Chat = () => {
             const chatIndex = userChatsData.chats.findIndex((c) => c.chatId === chatId);
 
             if (chatIndex !== -1) {
-              userChatsData.chats[chatIndex].lastMessage = text;
+              userChatsData.chats[chatIndex].lastMessage = text || "Image sent";
               userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
               userChatsData.chats[chatIndex].updateAt = Date.now();
 
@@ -75,6 +98,13 @@ const Chat = () => {
     } catch (err) {
       console.log(err);
     }
+
+    setImg({
+      file: null,
+      url: ""
+    });
+
+    setText("");
   };
 
   return (
@@ -95,18 +125,28 @@ const Chat = () => {
       </div>
       <div className="center">
         {chat?.messages?.map((message) => (
-          <div className="message own" key={message?.createAt}>
+          <div className={message.senderId === currentUser?.id ? "message own" : "message"} key={message?.createAt}>
             <div className="texts">
               {message.img && <img className="imagen" src={message.img} alt="" />}
               <p>{message.text}</p>
             </div>
           </div>
         ))}
+        {img.url && (
+          <div className="message own">
+            <div className="texts">
+              <img src={img.url} alt="" />
+            </div>
+          </div>
+        )}
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
         <div className="icons">
-          <FaImage className="icon" />
+          <label htmlFor="file">
+            <FaImage className="icon" />
+          </label>
+          <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} />
           <FaCamera className="icon" />
           <FaMicrophone className="icon" />
         </div>
