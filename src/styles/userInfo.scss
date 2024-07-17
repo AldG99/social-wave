@@ -3,6 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  background-color: rgba(100, 100, 155, 0.75);
+  border-top-left-radius: 12px;
 
   .user {
     display: flex;
@@ -11,13 +13,14 @@
 
     h2 {
       margin-left: 10px;
+      color: #fff6ed;
     }
 
     img {
       width: 50px;
       height: 50px;
-      border-radius: 50%; /* Para hacer la imagen redonda */
-      object-fit: cover; /* Mantiene la relación de aspecto de la imagen */
+      border-radius: 50%;
+      object-fit: cover;
     }
   }
 
@@ -27,11 +30,11 @@
 
     .icon {
       font-size: 1.05rem;
-      color: #ffffff;
+      color: #fff6ed;
       cursor: pointer;
 
       &:hover {
-        color: #000;
+        color: #eaccad;
       }
     }
   }

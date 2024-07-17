@@ -1,7 +1,7 @@
 .chatList {
   flex: 1;
   overflow-y: auto;
-  background-color: #f9f9f9;
+  background-color: rgba(145, 110, 200, 0.35);
   border-bottom-left-radius: 12px;
 
   .search {
@@ -9,7 +9,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background-color: #ffffff;
+    background-color: rgba(125, 115, 140, 0.35);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .searchBar {
@@ -54,7 +54,7 @@
     gap: 1rem;
     padding: 1rem;
     cursor: pointer;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid rgba(220, 190, 225, 0.195);
     transition: background-color 0.2s;
 
     &:hover {
@@ -75,13 +75,13 @@
 
       span {
         font-weight: 500;
-        color: #343a40;
+        color: #fff6ed;
       }
 
       p {
         font-size: 0.875rem;
         font-weight: 300;
-        color: #6c757d;
+        color: #fdecda;
       }
     }
   }

@@ -13,19 +13,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height:  100vh;
+  height: 100vh;
   color: white;
+  background: 
+    linear-gradient(rgba(255, 127, 80, 0.3), rgba(255, 127, 80, 0.3)), /* Capa de naranja transparente */
+    linear-gradient(to bottom, #483D8B, #ffb265);
+  background-size: cover;
 }
 
 .container {
   width: 80vw;
   height: 90vh;
-  background-color: rgb(89, 103, 136);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
 }
-
 
 .loading {
   padding: 50px;

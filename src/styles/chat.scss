@@ -1,19 +1,17 @@
 .chat {
   flex: 2;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
+  background-color: rgba(253, 201, 240, 0.45);
 
   .top {
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    background-color: #ffffff;
+    background-color: rgba(245, 185, 140, 0.75);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.150);
 
     .user {
       display: flex;
@@ -33,15 +31,15 @@
         gap: 5px;
 
         span {
-          font-size: 16px; // Ajustado para ser más responsivo
+          font-size: 16px;
           font-weight: bold;
-          color: #343a40;
+          color: #fff6ed;
         }
 
         p {
           font-size: 14px;
           font-weight: 300;
-          color: #6c757d;
+          color: #fff8f1;
         }
       }
     }
@@ -51,7 +49,7 @@
       gap: 10px;
 
       .icon {
-        font-size: 1.5rem; // Ajustado para ser más responsivo
+        font-size: 1.5rem;
         color: #6c757d;
         cursor: pointer;
 
@@ -70,6 +68,18 @@
     flex-direction: column;
     gap: 20px;
 
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.20);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(175, 100, 110, 0.5);
+    }
+
     .message {
       max-width: 70%;
       display: flex;
@@ -80,7 +90,7 @@
 
         .texts {
           p {
-            background-color: #2a91d6;
+            background-color: rgba(100, 130, 175, 0.5);
             color: white;
           }
         }
@@ -99,7 +109,7 @@
 
         img {
           width: 100%;
-          height: auto; // Ajustado para ser más responsivo
+          height: auto;
           max-height: 300px;
           border-radius: 10px;
           object-fit: cover;
@@ -107,7 +117,7 @@
 
         p {
           padding: 10px 15px;
-          background-color: #e9ecef;
+          background-color: rgba(175, 100, 110, 0.5);
           border-radius: 10px;
           color: #343a40;
         }
@@ -125,9 +135,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid #ddd;
     gap: 20px;
-    background-color: #ffffff;
+    background-color: rgba(100, 135, 175, 0.75);
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.150);
 
     .icons {
       display: flex;
