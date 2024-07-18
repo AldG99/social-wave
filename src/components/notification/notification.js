@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify";
-import "../../styles/notification.scss";
+import "../../styles/notification/notification.scss";
 
 const Notification = () => {
   return (

@@ -4,10 +4,10 @@ import { auth } from './lib/firebaseConfig';
 import { useUserStore } from './lib/userStore';
 import { useChatStore } from './lib/chatStore';
 
-import Login from './components/login/login';
+import Login from './components/auth/login';
 import Chat from './components/chat/chat';
 import Detail from './components/detail/detail';
-import List from './components/list/list';
+import List from './components/chat/list';
 import Notification from './components/notification/notification';
 
 const App = () => {

@@ -1,7 +1,7 @@
 import React from "react";
-import { useUserStore } from "../../../lib/userStore";
+import { useUserStore } from "../../lib/userStore";
 import { FaEllipsisH, FaVideo, FaEdit } from "react-icons/fa";
-import "../../../styles/userInfo.scss";
+import "../../styles/user/userInfo.scss";
 
 const UserInfo = () => {
   const { currentUser } = useUserStore();

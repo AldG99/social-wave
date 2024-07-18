@@ -1,12 +1,21 @@
 import React from "react";
 import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
-import "../../styles/detail.scss";
+import "../../styles/detail/detail.scss";
 import { auth } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
+
+const continentNames = {
+  africa: "África",
+  asia: "Asia",
+  europe: "Europa",
+  "north-america": "América del Norte",
+  "south-america": "América del Sur",
+  oceania: "Oceanía",
+};
 
 const Detail = () => {
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
@@ -33,15 +42,11 @@ const Detail = () => {
       <div className="user">
         <img src={user?.avatar} alt="Avatar" />
         <h2>{user?.username}</h2>
+        <h4>{user?.subname}</h4>
+        <h3>{continentNames[user?.continent]}</h3>
         <p>Somos nosotros contra las máquinas.</p>
       </div>
       <div className="info">
-        <div className="option">
-          <div className="title">
-            <span>Configuración del Chat</span>
-            <FaArrowUp className="arrowIcon" />
-          </div>
-        </div>
         <div className="option">
           <div className="title">
             <span>Privacidad y ayuda</span>

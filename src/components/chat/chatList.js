@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaPlus, FaMinus } from "react-icons/fa";
-import "../../../styles/chatList.scss";
-import AddUser from "../../addUser/addUser";
-import { useUserStore } from "../../../lib/userStore";
+import "../../styles/chat/chatList.scss";
+import AddUser from "../auth/addUser";
+import { useUserStore } from "../../lib/userStore";
 import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../../lib/firebaseConfig";
-import { useChatStore } from "../../../lib/chatStore";
+import { db } from "../../lib/firebaseConfig";
+import { useChatStore } from "../../lib/chatStore";
 
 const ChatList = () => {
   const [chats, setChats] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
-import "../../styles/chat.scss";
+import "../../styles/chat/chat.scss";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";

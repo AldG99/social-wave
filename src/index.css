@@ -16,7 +16,7 @@ body {
   height: 100vh;
   color: white;
   background: 
-    linear-gradient(rgba(255, 127, 80, 0.3), rgba(255, 127, 80, 0.3)), /* Capa de naranja transparente */
+    linear-gradient(rgba(255, 127, 80, 0.3), rgba(255, 127, 80, 0.3)),
     linear-gradient(to bottom, #483D8B, #ffb265);
   background-size: cover;
 }
@@ -25,8 +25,8 @@ body {
   width: 80vw;
   height: 90vh;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .loading {

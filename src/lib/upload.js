@@ -2,6 +2,10 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "./firebaseConfig";
 
 const upload = (file) => {
+  if (!file || !file.type.startsWith('image/')) {
+    return Promise.reject("Por favor, seleccione un archivo de imagen válido.");
+  }
+
   const date = new Date().toISOString();
   const storageRef = ref(storage, `images/${date}-${file.name}`);
 
