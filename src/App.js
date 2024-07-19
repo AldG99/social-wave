@@ -9,6 +9,7 @@ import Chat from './components/chat/chat';
 import Detail from './components/detail/detail';
 import List from './components/chat/list';
 import Notification from './components/notification/notification';
+import MainUserInfo from './components/user/mainUserInfo';
 
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -31,7 +32,7 @@ const App = () => {
       {currentUser ? (
         <>
           <List />
-          {chatId && <Chat />}
+          {chatId ? <Chat /> : <MainUserInfo />}
           {chatId && <Detail />}
         </>
       ) : (

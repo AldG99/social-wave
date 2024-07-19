@@ -1,32 +1,32 @@
 .userInfo {
-  padding: 20px;
+  padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-around;
   background-color: rgba(100, 100, 155, 0.35);
   border-top-left-radius: 12px;
 
   .user {
     display: flex;
     align-items: center;
-    gap: 20px;
-
-    h2 {
-      margin-left: 10px;
-      color: #fff6ed;
-    }
+    gap: 1rem;
 
     img {
       width: 50px;
       height: 50px;
       border-radius: 50%;
       object-fit: cover;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 1.125rem;
+      color: #fff6ed;
     }
   }
 
   .icons {
     display: flex;
-    gap: 20px;
+    gap: 1rem;
 
     .icon {
       font-size: 1.05rem;

@@ -1,12 +1,12 @@
 import React from "react";
 import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
-import "../../styles/detail/detail.scss";
 import { auth } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
+import "../../styles/detail/detail.scss";
 
 const continentNames = {
   africa: "África",
