@@ -11,9 +11,9 @@ const UserInfo = () => {
   console.log("currentUser:", currentUser);
 
   return (
-    <div className="userInfo">
+    <div className="userInfo" onClick={userProfile}>
       <div className="user">
-        <img src={currentUser?.avatar} onClick={userProfile} alt="Avatar" />
+        <img src={currentUser?.avatar} alt="Avatar" />
         <h2>{currentUser?.username}</h2>
       </div>
     </div>

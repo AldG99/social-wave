@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage, FaCamera, FaMicrophone } from "react-icons/fa";
+import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import "../../styles/chat/chat.scss";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -114,7 +114,7 @@ const Chat = () => {
           <img src={user?.avatar} alt="Avatar" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p>Somos nosotros contra las máquinas.</p>
+            <p>{user?.subname}</p>
           </div>
         </div>
         <div className="icons">
@@ -147,8 +147,6 @@ const Chat = () => {
             <FaImage className="icon" />
           </label>
           <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} disabled={isCurrentUserBlocked || isReceiverBlocked}/>
-          <FaCamera className="icon" />
-          <FaMicrophone className="icon" />
         </div>
         <input type="text" placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "No puedes enviar un mensaje" : "Escribe un mensaje..."} value={text} onChange={(e) => setText(e.target.value)} disabled={isCurrentUserBlocked || isReceiverBlocked} />
         <div className="emoji">

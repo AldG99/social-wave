@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
 import { auth } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "../../styles/detail/detail.scss";
 
 const continentNames = {
@@ -18,8 +18,26 @@ const continentNames = {
 };
 
 const Detail = () => {
+  const [presentation, setPresentation] = useState("");
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
   const { currentUser } = useUserStore();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.id));
+        if (userDoc.exists()) {
+          setPresentation(userDoc.data().presentation || "Hola a Todos!");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handleBlock = async () => {
     if (!user) return;
@@ -44,7 +62,7 @@ const Detail = () => {
         <h2>{user?.username}</h2>
         <h4>{user?.subname}</h4>
         <h3>{continentNames[user?.continent]}</h3>
-        <p>Somos nosotros contra las máquinas.</p>
+        <p>{presentation}</p>
       </div>
       <div className="info">
         <div className="option">

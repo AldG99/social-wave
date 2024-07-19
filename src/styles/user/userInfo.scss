@@ -4,6 +4,7 @@
   align-items: center;
   background-color: rgba(100, 100, 155, 0.35);
   border-top-left-radius: 12px;
+  cursor: pointer;
 
   .user {
     display: flex;
@@ -15,7 +16,6 @@
       height: 50px;
       border-radius: 50%;
       object-fit: cover;
-      cursor: pointer;
     }
 
     h2 {
