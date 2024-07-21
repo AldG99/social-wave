@@ -3,8 +3,9 @@ import { useUserStore } from "../../lib/userStore";
 import { FaEllipsisH, FaEdit, FaSave, FaUserCircle } from "react-icons/fa";
 import "../../styles/user/mainUserInfo.scss";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../lib/firebaseConfig";
+import { db, auth } from "../../lib/firebaseConfig";
 import upload from "../../lib/upload";
+import HighlightedStories from "./HighlightedStories";
 
 const continentNames = {
   africa: "África",
@@ -20,16 +21,26 @@ const MainUserInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [presentation, setPresentation] = useState(currentUser?.presentation || "Hola a Todos!");
   const [avatar, setAvatar] = useState({ file: null, url: currentUser?.avatar || "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSavePresentation = async () => {
+    if (presentation.trim().length === 0) {
+      setError("La presentación no puede estar vacía.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
     try {
       await updateDoc(doc(db, "users", currentUser.id), {
-        presentation: presentation,
+        presentation: presentation.trim(),
       });
       setIsEditing(false);
     } catch (err) {
       console.log(err);
+      setError("Error al guardar la presentación.");
     }
+    setLoading(false);
   };
 
   const handleAvatarChange = (e) => {
@@ -43,22 +54,26 @@ const MainUserInfo = () => {
 
   const handleSaveAvatar = async () => {
     if (avatar.file) {
+      setLoading(true);
+      setError(null);
       try {
         const imgUrl = await upload(avatar.file);
         await updateDoc(doc(db, "users", currentUser.id), {
           avatar: imgUrl,
         });
-        setAvatar({ ...avatar, url: imgUrl });
+        setAvatar({ ...avatar, url: imgUrl, file: null });
       } catch (err) {
         console.log(err);
+        setError("Error al guardar el avatar.");
       }
+      setLoading(false);
     }
   };
 
   return (
     <div className="mainUserInfo">
       <div className="user">
-        <label htmlFor="file" className="avatar-label">
+        <label htmlFor="avatar-file" className="avatar-label">
           {avatar.url ? (
             <img src={avatar.url} alt="Avatar" />
           ) : (
@@ -67,7 +82,7 @@ const MainUserInfo = () => {
         </label>
         <input
           type="file"
-          id="file"
+          id="avatar-file"
           style={{ display: "none" }}
           onChange={handleAvatarChange}
         />
@@ -79,22 +94,29 @@ const MainUserInfo = () => {
             <textarea
               value={presentation}
               onChange={(e) => setPresentation(e.target.value)}
+              maxLength="200"
             />
-            <button onClick={handleSavePresentation}>
+            <button onClick={handleSavePresentation} disabled={loading}>
               <FaSave className="icon" />
+              {loading ? "Guardando..." : "Guardar"}
             </button>
           </div>
         ) : (
           <p onClick={() => setIsEditing(true)}>{presentation}</p>
         )}
-        <button onClick={handleSaveAvatar} disabled={!avatar.file}>
-          Guardar Foto
+        {error && <p className="error">{error}</p>}
+        <button onClick={handleSaveAvatar} disabled={!avatar.file || loading}>
+          {loading ? "Guardando..." : "Guardar Foto"}
         </button>
       </div>
       <div className="icons">
         <FaEllipsisH className="icon" />
         <FaEdit className="icon" onClick={() => setIsEditing(true)} />
       </div>
+      <button className="logout" onClick={() => auth.signOut()}>
+          Salir
+        </button>
+      <HighlightedStories />
     </div>
   );
 };

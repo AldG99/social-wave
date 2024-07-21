@@ -1,15 +1,12 @@
 **/src/lib/firebaseConfig.js
-**/src/lib/chatStore.js
-**/src/lib/upload.js
-**/src/lib/userStore.js
 
 **/src/components/auth/addUser.js
 **/src/components/auth/login.js
+**/src/components/auth/register.js
 
 **/src/styles/auth/addUser.scss
 **/src/styles/auth/login.scss
-
-**/src/index.css
+**/src/styles/auth/register.scss
 
 .env
 node_modules

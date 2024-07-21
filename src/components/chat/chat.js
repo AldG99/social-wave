@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 import "../../styles/chat/chat.scss";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
@@ -129,6 +131,7 @@ const Chat = () => {
             <div className="texts">
               {message.img && <img className="imagen" src={message.img} alt="" />}
               <p>{message.text}</p>
+              <span className="time">{formatDistanceToNow(new Date(message.createAt.toDate()), { locale: es })} atrás</span>
             </div>
           </div>
         ))}

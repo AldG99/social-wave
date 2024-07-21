@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
-import { auth } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
@@ -98,9 +97,6 @@ const Detail = () => {
             : isReceiverBlocked
             ? "Usuario bloqueado"
             : "Bloquear usuario"}
-        </button>
-        <button className="logout" onClick={() => auth.signOut()}>
-          Salir
         </button>
       </div>
     </div>
