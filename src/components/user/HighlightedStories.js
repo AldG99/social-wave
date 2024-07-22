@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
 import '../../styles/user/highlightedStories.scss';
 import { db, storage } from '../../lib/firebaseConfig';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useUserStore } from '../../lib/userStore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import ImageModal from './imageModal';
 
 const HighlightedStories = () => {
   const { currentUser } = useUserStore();
@@ -16,6 +17,8 @@ const HighlightedStories = () => {
   const [selectedStory, setSelectedStory] = useState(null);
   const [editStoryName, setEditStoryName] = useState("");
   const [editStoryCover, setEditStoryCover] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -158,11 +161,9 @@ const HighlightedStories = () => {
       const photoIndex = updatedStories[storyIndex].photos.findIndex((photo) => photo.url === photoUrl);
       const photoToDelete = updatedStories[storyIndex].photos[photoIndex];
 
-      // Delete the photo from storage
       const photoRef = ref(storage, photoToDelete.url);
       await deleteObject(photoRef);
 
-      // Remove the photo from the story
       updatedStories[storyIndex].photos.splice(photoIndex, 1);
 
       await updateDoc(doc(db, 'users', currentUser.id), {
@@ -260,21 +261,37 @@ const HighlightedStories = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const countPhotos = (story) => {
+    return story.photos.length;
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
+  const openImageModal = (story, index) => {
+    setSelectedStory(story);
+    setCurrentPhotoIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleNextPhoto = () => {
+    setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % selectedStory.photos.length);
+  };
+
+  const handlePrevPhoto = () => {
+    setCurrentPhotoIndex((prevIndex) => (prevIndex - 1 + selectedStory.photos.length) % selectedStory.photos.length);
+  };
+
   return (
     <div className="highlightedStories">
       <h3>Historias Destacadas</h3>
-      <div className="stories">
-        {stories.map((story, index) => (
-          <div key={index} className="story">
-            <div className="story-image-container" onClick={() => handleStoryClick(story)}>
-              {story.cover && (
-                <img src={story.cover} alt={`story-cover-${index}`} />
-              )}
-            </div>
-            <div className="story-name">{story.name}</div>
-          </div>
-        ))}
-        <div className="addStory">
+      <div className="addStory">
           <input
             type="file"
             id="story-cover"
@@ -305,10 +322,32 @@ const HighlightedStories = () => {
             </button>
           )}
         </div>
+      <div className="stories">
+        {stories.map((story, index) => (
+          <div key={index} className="story">
+            <div className="story-image-container" onClick={() => handleStoryClick(story)}>
+              {story.cover && (
+                <img
+                  src={story.cover}
+                  alt={`story-cover-${index}`}
+                />
+              )}
+            </div>
+            <div className="story-name">
+              {truncateText(story.name, 7)}
+            </div>
+          </div>
+        ))}
       </div>
       {selectedStory && (
         <div className="story-details">
+          <button className="close-button" onClick={() => setSelectedStory(null)}>
+            <FaTimes />
+          </button>
           <h4>{selectedStory.name}</h4>
+          <div>
+            <strong>Número de fotos:</strong> {countPhotos(selectedStory)}
+          </div>
           <input
             type="text"
             value={editStoryName}
@@ -329,7 +368,11 @@ const HighlightedStories = () => {
           <div className="photos">
             {selectedStory.photos.map((photo, index) => (
               <div key={index} className="photo-container">
-                <img src={photo.url} alt={`story-photo-${index}`} />
+                <img
+                  src={photo.url}
+                  alt={`story-photo-${index}`}
+                  onClick={() => openImageModal(selectedStory, index)}
+                />
                 <div className="photo-date">{formatDate(photo.uploadedAt)}</div>
                 <button
                   className="delete-photo-button"
@@ -350,6 +393,16 @@ const HighlightedStories = () => {
             <FaPlus /> Agregar foto
           </label>
         </div>
+      )}
+      {isModalOpen && selectedStory && (
+        <ImageModal
+          isOpen={isModalOpen}
+          photos={selectedStory.photos}
+          currentPhotoIndex={currentPhotoIndex}
+          onClose={closeImageModal}
+          onNext={handleNextPhoto}
+          onPrev={handlePrevPhoto}
+        />
       )}
     </div>
   );

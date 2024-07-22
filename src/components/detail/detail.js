@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowUp, FaArrowDown, FaDownload } from "react-icons/fa";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
@@ -62,35 +61,6 @@ const Detail = () => {
         <h4>{user?.subname}</h4>
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
-      </div>
-      <div className="info">
-        <div className="option">
-          <div className="title">
-            <span>Privacidad y ayuda</span>
-            <FaArrowUp className="arrowIcon" />
-          </div>
-        </div>
-        <div className="option">
-          <div className="title">
-            <span>Fotos compartidas</span>
-            <FaArrowDown className="arrowIcon" />
-          </div>
-          <div className="photos">
-            <div className="photoItem">
-              <div className="photoDetail">
-                <img className="imagen" src={require("../../images/edificio.jpg")} alt="" />
-                <span>photo_2024_2.png</span>
-              </div>
-              <FaDownload className="downloadIcon" />
-            </div>
-          </div>
-        </div>
-        <div className="option">
-          <div className="title">
-            <span>Archivos Compartidos</span>
-            <FaArrowUp className="arrowIcon" />
-          </div>
-        </div>
         <button onClick={handleBlock}>
           {isCurrentUserBlocked
             ? "¡Estás bloqueado!"

@@ -109,6 +109,11 @@ const Chat = () => {
     setText("");
   };
 
+  const formatTimeAgo = (date) => {
+    const distance = formatDistanceToNow(date, { locale: es });
+    return `hace ${distance}`;
+  };
+
   return (
     <div className="chat">
       <div className="top">
@@ -131,7 +136,7 @@ const Chat = () => {
             <div className="texts">
               {message.img && <img className="imagen" src={message.img} alt="" />}
               <p>{message.text}</p>
-              <span className="time">{formatDistanceToNow(new Date(message.createAt.toDate()), { locale: es })} atrás</span>
+              <span className="time">{formatTimeAgo(new Date(message.createAt.toDate()))}</span>
             </div>
           </div>
         ))}

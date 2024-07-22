@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useUserStore } from "../../lib/userStore";
-import { FaEllipsisH, FaEdit, FaSave, FaUserCircle } from "react-icons/fa";
+import { FaSave, FaUserCircle } from "react-icons/fa";
 import "../../styles/user/mainUserInfo.scss";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../lib/firebaseConfig";
 import upload from "../../lib/upload";
-import HighlightedStories from "./HighlightedStories";
+import HighlightedStories from "./highlightedStories";
 
 const continentNames = {
   africa: "África",
@@ -108,10 +108,6 @@ const MainUserInfo = () => {
         <button onClick={handleSaveAvatar} disabled={!avatar.file || loading}>
           {loading ? "Guardando..." : "Guardar Foto"}
         </button>
-      </div>
-      <div className="icons">
-        <FaEllipsisH className="icon" />
-        <FaEdit className="icon" onClick={() => setIsEditing(true)} />
       </div>
       <button className="logout" onClick={() => auth.signOut()}>
           Salir
