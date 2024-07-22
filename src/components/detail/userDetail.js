@@ -1,9 +1,11 @@
+// src/components/userDetail.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import HighlightedStoriesUserDetail from "./HighlightedStoriesUserDetail"; // Importa el nuevo componente
 import "../../styles/detail/userDetail.scss";
 
 const continentNames = {
@@ -17,10 +19,10 @@ const continentNames = {
 
 const UserDetail = ({ handleBackToChat }) => {
   const [presentation, setPresentation] = useState("");
+  const [highlightedStories, setHighlightedStories] = useState([]);
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
   const { currentUser } = useUserStore();
   
-  // Ref para el contenedor de UserDetail
   const userDetailRef = useRef(null);
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const UserDetail = ({ handleBackToChat }) => {
         const userDoc = await getDoc(doc(db, "users", user.id));
         if (userDoc.exists()) {
           setPresentation(userDoc.data().presentation || "Hola a Todos!");
+          setHighlightedStories(userDoc.data().highlightedStories || []);
         }
       } catch (err) {
         console.log(err);
@@ -74,6 +77,7 @@ const UserDetail = ({ handleBackToChat }) => {
       <div className="user">
         <img src={user?.avatar} alt="Avatar" />
         <h2>{user?.username}</h2>
+        <h4>{user?.subname}</h4>
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
         <button onClick={handleBackToChat}>Regresar</button>
@@ -85,6 +89,7 @@ const UserDetail = ({ handleBackToChat }) => {
             : "Bloquear usuario"}
         </button>
       </div>
+      <HighlightedStoriesUserDetail stories={highlightedStories} />
     </div>
   );
 };

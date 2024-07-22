@@ -17,7 +17,6 @@ const App = () => {
   const { chatId } = useChatStore();
   const [showRegister, setShowRegister] = useState(false);
   const [showUserDetail, setShowUserDetail] = useState(false);
-  const [showChat, setShowChat] = useState(true);
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
@@ -36,24 +35,15 @@ const App = () => {
 
   const handleShowUserDetail = () => {
     setShowUserDetail(true);
-    setShowChat(false);
   };
 
   const handleCloseUserDetail = () => {
     setShowUserDetail(false);
-    setShowChat(true);
-  };
-
-  // Función para manejar el clic fuera del componente UserDetail
-  const handleOutsideClick = (event) => {
-    if (event.target.classList.contains("container")) {
-      handleCloseUserDetail();
-    }
   };
 
   return (
-    <div className="container" onClick={handleOutsideClick}>
-      <List /> {/* Siempre visible */}
+    <div className="container">
+      {currentUser && <List />} {/* Siempre visible cuando el usuario esté autenticado */}
 
       {showUserDetail ? (
         <UserDetail handleBackToChat={handleCloseUserDetail} />
@@ -61,12 +51,14 @@ const App = () => {
         <>
           {currentUser ? (
             <>
-              {chatId && showChat ? (
-                <Chat />
+              {chatId ? (
+                <>
+                  <Chat />
+                  <Detail onProfileClick={handleShowUserDetail} />
+                </>
               ) : (
-                !chatId && <MainUserInfo onProfileClick={handleShowUserDetail} />
+                <MainUserInfo onProfileClick={handleShowUserDetail} />
               )}
-              {chatId && !showUserDetail && <Detail onProfileClick={handleShowUserDetail} />}
             </>
           ) : (
             showRegister ? (
@@ -75,6 +67,7 @@ const App = () => {
               <Login toggleRegister={toggleRegister} />
             )
           )}
+
           <Notification />
         </>
       )}
