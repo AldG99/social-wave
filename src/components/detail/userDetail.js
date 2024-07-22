@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import "../../styles/detail/detail.scss";
+import "../../styles/detail/userDetail.scss";
 
 const continentNames = {
   africa: "África",
@@ -15,10 +15,13 @@ const continentNames = {
   oceania: "Oceanía",
 };
 
-const Detail = ({ onProfileClick }) => {
+const UserDetail = ({ handleBackToChat }) => {
   const [presentation, setPresentation] = useState("");
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
   const { currentUser } = useUserStore();
+  
+  // Ref para el contenedor de UserDetail
+  const userDetailRef = useRef(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -53,17 +56,27 @@ const Detail = ({ onProfileClick }) => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userDetailRef.current && !userDetailRef.current.contains(event.target)) {
+        handleBackToChat();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleBackToChat]);
+
   return (
-    <div className="detail">
+    <div className="userDetail" ref={userDetailRef}>
       <div className="user">
         <img src={user?.avatar} alt="Avatar" />
         <h2>{user?.username}</h2>
-        <h4>{user?.subname}</h4>
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
-        <button onClick={onProfileClick}>
-          Perfil de Usuario
-        </button>
+        <button onClick={handleBackToChat}>Regresar</button>
         <button onClick={handleBlock}>
           {isCurrentUserBlocked
             ? "¡Estás bloqueado!"
@@ -76,4 +89,4 @@ const Detail = ({ onProfileClick }) => {
   );
 };
 
-export default Detail;
+export default UserDetail;
