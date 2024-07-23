@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useChatStore } from "../../lib/chatStore";
-import { useUserStore } from "../../lib/userStore";
-import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import "../../styles/detail/detail.scss";
 
 const continentNames = {
@@ -17,8 +15,7 @@ const continentNames = {
 
 const Detail = ({ onProfileClick }) => {
   const [presentation, setPresentation] = useState("");
-  const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
-  const { currentUser } = useUserStore();
+  const { user } = useChatStore();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,22 +34,6 @@ const Detail = ({ onProfileClick }) => {
     fetchUserData();
   }, [user]);
 
-  const handleBlock = async () => {
-    if (!user) return;
-
-    const userDocRef = doc(db, "users", currentUser.id);
-
-    try {
-      await updateDoc(userDocRef, {
-        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
-      });
-
-      changeBlock();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <div className="detail">
       <div className="user">
@@ -63,13 +44,6 @@ const Detail = ({ onProfileClick }) => {
         <p>{presentation}</p>
         <button onClick={onProfileClick}>
           Perfil de Usuario
-        </button>
-        <button onClick={handleBlock}>
-          {isCurrentUserBlocked
-            ? "¡Estás bloqueado!"
-            : isReceiverBlocked
-            ? "Usuario bloqueado"
-            : "Bloquear usuario"}
         </button>
       </div>
     </div>

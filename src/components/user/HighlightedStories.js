@@ -20,6 +20,10 @@ const HighlightedStories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
+  // Estado para el comentario de la foto
+  const [photoComment, setPhotoComment] = useState("");
+  const [newPhoto, setNewPhoto] = useState(null);
+
   useEffect(() => {
     const fetchStories = async () => {
       if (!currentUser?.id) return;
@@ -49,6 +53,10 @@ const HighlightedStories = () => {
 
   const handleNameChange = (e) => {
     setNewStoryName(e.target.value);
+  };
+
+  const handlePhotoCommentChange = (e) => {
+    setPhotoComment(e.target.value);
   };
 
   const addStory = async () => {
@@ -94,7 +102,7 @@ const HighlightedStories = () => {
                 id: date,
                 name: newStoryName.trim(),
                 cover: coverURL,
-                photos: [{ url: storyURL, uploadedAt: date }],
+                photos: [{ url: storyURL, uploadedAt: date, comment: photoComment }],
               };
               await updateDoc(doc(db, 'users', currentUser.id), {
                 highlightedStories: arrayUnion(newStoryData),
@@ -103,6 +111,7 @@ const HighlightedStories = () => {
               setNewStory(null);
               setNewStoryCover(null);
               setNewStoryName("");
+              setPhotoComment(""); // Limpiar el comentario
             } catch (error) {
               console.error('Error saving story: ', error);
             }
@@ -138,6 +147,7 @@ const HighlightedStories = () => {
           const newPhotoData = {
             url: downloadURL,
             uploadedAt: date,
+            comment: photoComment, // Añadir comentario
           };
           updatedStories[storyIndex].photos.push(newPhotoData);
           await updateDoc(doc(db, 'users', currentUser.id), {
@@ -145,6 +155,7 @@ const HighlightedStories = () => {
           });
           setStories(updatedStories);
           setSelectedStory(null);
+          setPhotoComment(""); // Limpiar el comentario
         } catch (error) {
           console.error('Error adding photo to story: ', error);
         }
@@ -178,7 +189,7 @@ const HighlightedStories = () => {
 
   const handlePhotoChange = (e, storyId) => {
     if (e.target.files[0] && e.target.files[0].type.startsWith('image/')) {
-      addPhotoToStory(storyId, e.target.files[0]);
+      setNewPhoto(e.target.files[0]);
     } else {
       alert('Por favor, seleccione un archivo de imagen válido');
     }
@@ -256,9 +267,29 @@ const HighlightedStories = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const deleteStory = async () => {
+    if (!selectedStory) return;
+
+    setLoading(true);
+    try {
+      // Eliminar fotos del almacenamiento
+      await Promise.all(selectedStory.photos.map(async (photo) => {
+        const photoRef = ref(storage, photo.url);
+        await deleteObject(photoRef);
+      }));
+
+      // Eliminar la historia de la base de datos
+      const updatedStories = stories.filter((story) => story.id !== selectedStory.id);
+      await updateDoc(doc(db, 'users', currentUser.id), {
+        highlightedStories: updatedStories,
+      });
+
+      setStories(updatedStories);
+      setSelectedStory(null);
+    } catch (error) {
+      console.error('Error deleting story: ', error);
+    }
+    setLoading(false);
   };
 
   const countPhotos = (story) => {
@@ -292,36 +323,42 @@ const HighlightedStories = () => {
     <div className="highlightedStories">
       <h3>Historias Destacadas</h3>
       <div className="addStory">
-          <input
-            type="file"
-            id="story-cover"
-            style={{ display: 'none' }}
-            onChange={handleCoverChange}
-          />
-          <label htmlFor="story-cover" className="addStoryLabel">
-            <FaPlus /> Portada
-          </label>
-          <input
-            type="file"
-            id="story-file"
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-          />
-          <label htmlFor="story-file" className="addStoryLabel">
-            <FaPlus /> Historia
-          </label>
-          <input
-            type="text"
-            placeholder="Nombre de la historia"
-            value={newStoryName}
-            onChange={handleNameChange}
-          />
-          {newStory && newStoryCover && (
-            <button onClick={addStory} disabled={loading}>
-              {loading ? 'Guardando...' : 'Guardar Historia'}
-            </button>
-          )}
-        </div>
+        <input
+          type="file"
+          id="story-cover"
+          style={{ display: 'none' }}
+          onChange={handleCoverChange}
+        />
+        <label htmlFor="story-cover" className="addStoryLabel">
+          <FaPlus /> Portada
+        </label>
+        <input
+          type="file"
+          id="story-file"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+        <label htmlFor="story-file" className="addStoryLabel">
+          <FaPlus /> Historia
+        </label>
+        <input
+          type="text"
+          placeholder="Nombre de la historia"
+          value={newStoryName}
+          onChange={handleNameChange}
+        />
+        <input
+          type="text"
+          placeholder="Comentario sobre la foto"
+          value={photoComment}
+          onChange={handlePhotoCommentChange}
+        />
+        {newStory && newStoryCover && (
+          <button onClick={addStory} disabled={loading}>
+            {loading ? 'Guardando...' : 'Guardar Historia'}
+          </button>
+        )}
+      </div>
       <div className="stories">
         {stories.map((story, index) => (
           <div key={index} className="story">
@@ -365,6 +402,13 @@ const HighlightedStories = () => {
           <button onClick={saveEditedStoryNameAndCover}>
             Guardar Cambios
           </button>
+          <button
+            className="deleteStoryButton"
+            onClick={deleteStory} // Aquí estamos utilizando deleteStory
+            disabled={loading}
+          >
+            {loading ? 'Eliminando...' : 'Eliminar Historia destacada'}
+          </button>
           <div className="photos">
             {selectedStory.photos.map((photo, index) => (
               <div key={index} className="photo-container">
@@ -373,7 +417,7 @@ const HighlightedStories = () => {
                   alt={`story-photo-${index}`}
                   onClick={() => openImageModal(selectedStory, index)}
                 />
-                <div className="photo-date">{formatDate(photo.uploadedAt)}</div>
+                <div className="photo-comment">{photo.comment}</div> {/* Mostrar comentario */}
                 <button
                   className="delete-photo-button"
                   onClick={() => deletePhotoFromStory(selectedStory.id, photo.url)}
@@ -389,9 +433,21 @@ const HighlightedStories = () => {
             style={{ display: 'none' }}
             onChange={(e) => handlePhotoChange(e, selectedStory.id)}
           />
+          <input
+            type="text"
+            placeholder="Comentario sobre la foto"
+            value={photoComment}
+            onChange={handlePhotoCommentChange}
+          />
           <label htmlFor="photo-file" className="addPhotoLabel">
             <FaPlus /> Agregar foto
           </label>
+          <button
+            onClick={() => newPhoto && addPhotoToStory(selectedStory.id, newPhoto)}
+            disabled={loading}
+          >
+            {loading ? 'Guardando...' : 'Agregar Foto'}
+          </button>
         </div>
       )}
       {isModalOpen && selectedStory && (

@@ -1,11 +1,8 @@
-// src/components/userDetail.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { useChatStore } from "../../lib/chatStore";
-import { useUserStore } from "../../lib/userStore";
-import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import HighlightedStoriesUserDetail from "./HighlightedStoriesUserDetail"; // Importa el nuevo componente
+import { doc, getDoc } from "firebase/firestore";
+import HighlightedStoriesUserDetail from "./HighlightedStoriesUserDetail";
 import "../../styles/detail/userDetail.scss";
 
 const continentNames = {
@@ -20,8 +17,7 @@ const continentNames = {
 const UserDetail = ({ handleBackToChat }) => {
   const [presentation, setPresentation] = useState("");
   const [highlightedStories, setHighlightedStories] = useState([]);
-  const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = useChatStore();
-  const { currentUser } = useUserStore();
+  const { user } = useChatStore();
   
   const userDetailRef = useRef(null);
 
@@ -42,22 +38,6 @@ const UserDetail = ({ handleBackToChat }) => {
 
     fetchUserData();
   }, [user]);
-
-  const handleBlock = async () => {
-    if (!user) return;
-
-    const userDocRef = doc(db, "users", currentUser.id);
-
-    try {
-      await updateDoc(userDocRef, {
-        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
-      });
-
-      changeBlock();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -81,13 +61,6 @@ const UserDetail = ({ handleBackToChat }) => {
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
         <button onClick={handleBackToChat}>Regresar</button>
-        <button onClick={handleBlock}>
-          {isCurrentUserBlocked
-            ? "¡Estás bloqueado!"
-            : isReceiverBlocked
-            ? "Usuario bloqueado"
-            : "Bloquear usuario"}
-        </button>
       </div>
       <HighlightedStoriesUserDetail stories={highlightedStories} />
     </div>
