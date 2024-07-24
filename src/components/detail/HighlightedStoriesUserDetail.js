@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../../styles/detail/highlightedStoriesUserDetail.scss";
 import { FaTimes } from 'react-icons/fa';
 import ImageModalDetail from './imageModalDetail';
+import "../../styles/detail/storiesUserDetail.scss"
 
 const HighlightedStoriesUserDetail = ({ stories }) => {
   const [selectedStory, setSelectedStory] = useState(null);
@@ -34,20 +34,20 @@ const HighlightedStoriesUserDetail = ({ stories }) => {
   };
 
   return (
-    <div className="highlightedStoriesUserDetail">
-      <div className="stories">
+    <div className="hs-highlightedStories">
+      <div className="hs-stories">
         {stories.length > 0 ? (
           stories.map((story, index) => (
-            <div key={index} className="story" onClick={() => handleStoryClick(story)}>
+            <div key={index} className="hs-story" onClick={() => handleStoryClick(story)}>
               {story.cover && (
-                <div className="story-image-container">
+                <div className="hs-story-image-container">
                   <img 
                     src={story.cover} 
                     alt={`Portada de la historia ${story.name || 'sin nombre'}`} 
                   />
                 </div>
               )}
-              <div className="story-name">{story.name}</div>
+              <div className="hs-story-name">{story.name}</div>
             </div>
           ))
         ) : (
@@ -55,20 +55,19 @@ const HighlightedStoriesUserDetail = ({ stories }) => {
         )}
       </div>
       {selectedStory && (
-        <div className="story-details">
-          <button className="close-button" onClick={closeStoryDetails}>
+        <div className="hs-story-details">
+          <button className="hs-close-button" onClick={closeStoryDetails}>
             <FaTimes />
           </button>
           <h4>{selectedStory.name}</h4>
-          <div className="photos">
+          <div className="hs-photos">
             {selectedStory.photos.map((photo, index) => (
-              <div key={index} className="photo-container">
+              <div key={index} className="hs-photo-container">
                 <img
                   src={photo.url}
                   alt={`story-photo-${index}`}
                   onClick={() => openImageModal(index)}
                 />
-                <div className="photo-date">{new Date(photo.uploadedAt).toLocaleDateString()}</div>
               </div>
             ))}
           </div>

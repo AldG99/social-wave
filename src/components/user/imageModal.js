@@ -24,16 +24,31 @@ const ImageModal = ({ isOpen, photos, currentPhotoIndex, onClose, onNext, onPrev
         <button className="prev-button" onClick={onPrev}>
           <FaArrowLeft />
         </button>
-        <img src={currentPhoto.url} alt={`photo-${currentPhotoIndex}`} className="modal-image" />
+        <div className="modal-image-container">
+          <img src={currentPhoto.url} alt={`photo-${currentPhotoIndex}`} className="modal-image" />
+        </div>
         <button className="next-button" onClick={onNext}>
           <FaArrowRight />
         </button>
-        <div className="photo-counter">
-          {currentPhotoIndex + 1} de {photos.length}
-        </div>
-        <div className="photo-date">{formatDate(currentPhoto.uploadedAt)}</div>
-        <div className="photo-comment">
-          {currentPhoto.comment} {/* Mostrar comentario */}
+        <div className="photo-info">
+          <div className="photo-counter-container">
+            <div className="photo-counter">
+              {currentPhotoIndex + 1} de {photos.length}
+            </div>
+          </div>
+          <div className="photo-date-container">
+            <div className="photo-date">{formatDate(currentPhoto.uploadedAt)}</div>
+          </div>
+          <div className="photo-title-container">
+            <div className="photo-title">
+              {currentPhoto.title}
+            </div>
+          </div>
+          <div className="photo-comment-container">
+            <div className="photo-comment">
+              {currentPhoto.comment} {/* Mostrar comentario */}
+            </div>
+          </div>
         </div>
       </div>
     </div>

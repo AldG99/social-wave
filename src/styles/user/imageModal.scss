@@ -4,82 +4,126 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); // Fondo semi-transparente
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000; // Asegúrate de que esté sobre otros contenidos
+  align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
   position: relative;
-  background: #fff;
-  padding: 30px; // Mayor padding para más espacio alrededor
+  width: 640px; // Tamaño fijo para el modal
+  height: 720px; // Tamaño fijo para el modal
+  background-color: #fff;
   border-radius: 8px;
-  width: 800px; // Tamaño fijo para el contenedor del modal
-  height: 600px; // Tamaño fijo para el contenedor del modal
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; // Asegura que el contenido no se desborde
+  flex-direction: column; // Apilar elementos verticalmente
 }
 
 .close-button,
 .prev-button,
 .next-button {
   position: absolute;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.8);
   border: none;
-  font-size: 30px; // Aumentar el tamaño de los íconos
-  color: #333;
+  border-radius: 50%;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: color 0.3s;
+  padding: 0.5rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+  }
 }
 
 .close-button {
-  top: 15px;
-  right: 15px;
+  top: 10px;
+  right: 10px;
 }
 
 .prev-button {
-  left: 15px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .next-button {
-  right: 15px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.modal-image {
-  max-width: 100%;
-  max-height: calc(100% - 80px); // Ajustar para dejar espacio para el contador y comentario
-  object-fit: contain; // Ajusta la imagen para que se mantenga dentro del contenedor
-  margin-bottom: 20px; // Mayor separación entre la imagen y el contador/comentario
+.modal-info-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.photo-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  height: 35%; // Mantener una altura fija
+}
+
+.photo-counter-container {
+  margin-bottom: 0.5rem;
 }
 
 .photo-counter {
-  font-size: 18px; // Aumentar el tamaño del texto
+  font-size: 1rem;
   color: #333;
-  margin: 10px 0; // Mayor separación entre el contador y el comentario
 }
 
-.photo-comment {
-  font-size: 16px; // Aumentar el tamaño del texto
-  color: #666;
+.photo-date-container {
+  margin-bottom: 0.5rem;
 }
 
 .photo-date {
-  font-size: 16px; // Tamaño del texto para la fecha
-  color: #007bff; // Color de la fecha (puedes cambiarlo según tus preferencias)
-  margin-bottom: 10px; // Espacio debajo de la fecha
+  font-size: 0.9rem;
+  color: #666;
 }
 
-.close-button:hover,
-.prev-button:hover,
-.next-button:hover {
-  color: #007bff; // Cambia el color cuando el usuario pasa el cursor sobre los botones
+.photo-title-container {
+  margin-top: 1rem; // Espaciado antes del título
+}
+
+.photo-title {
+  font-size: 1.2rem; // Tamaño del texto del título
+  font-weight: bold;
+  color: #333; // Color del texto del título
+  margin-bottom: 0.5rem; // Espaciado debajo del título
+}
+
+.photo-comment-container {
+  margin-top: 1rem;
+}
+
+.photo-comment {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.modal-image-container {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  overflow: hidden;
+  height: 65%; // Mantener una altura fija
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

@@ -20,7 +20,7 @@ const HighlightedStories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
-  // Estado para el comentario de la foto
+  const [photoTitle, setPhotoTitle] = useState("");
   const [photoComment, setPhotoComment] = useState("");
   const [newPhoto, setNewPhoto] = useState(null);
 
@@ -55,9 +55,23 @@ const HighlightedStories = () => {
     setNewStoryName(e.target.value);
   };
 
-  const handlePhotoCommentChange = (e) => {
-    setPhotoComment(e.target.value);
+  const handlePhotoTitleChange = (e) => {
+    const title = e.target.value;
+    if (title.length <= 40) {
+        setPhotoTitle(title);
+    } else {
+        alert('El título no puede exceder los 60 caracteres.');
+    }
   };
+
+  const handlePhotoCommentChange = (e) => {
+    const comment = e.target.value;
+    if (comment.length <= 260) {
+      setPhotoComment(comment);
+    } else {
+      alert('El comentario no puede exceder los 340 caracteres.');
+    }
+  };  
 
   const addStory = async () => {
     if (!newStory || !newStoryCover || !newStoryName.trim()) {
@@ -102,7 +116,7 @@ const HighlightedStories = () => {
                 id: date,
                 name: newStoryName.trim(),
                 cover: coverURL,
-                photos: [{ url: storyURL, uploadedAt: date, comment: photoComment }],
+                photos: [{ url: storyURL, uploadedAt: date, title: photoTitle, comment: photoComment }],
               };
               await updateDoc(doc(db, 'users', currentUser.id), {
                 highlightedStories: arrayUnion(newStoryData),
@@ -111,6 +125,7 @@ const HighlightedStories = () => {
               setNewStory(null);
               setNewStoryCover(null);
               setNewStoryName("");
+              setPhotoTitle("");
               setPhotoComment(""); // Limpiar el comentario
             } catch (error) {
               console.error('Error saving story: ', error);
@@ -147,6 +162,7 @@ const HighlightedStories = () => {
           const newPhotoData = {
             url: downloadURL,
             uploadedAt: date,
+            title: photoTitle, // Añadir título
             comment: photoComment, // Añadir comentario
           };
           updatedStories[storyIndex].photos.push(newPhotoData);
@@ -155,6 +171,7 @@ const HighlightedStories = () => {
           });
           setStories(updatedStories);
           setSelectedStory(null);
+          setPhotoTitle(""); // Limpiar el título
           setPhotoComment(""); // Limpiar el comentario
         } catch (error) {
           console.error('Error adding photo to story: ', error);
@@ -349,6 +366,12 @@ const HighlightedStories = () => {
         />
         <input
           type="text"
+          placeholder="Título de la foto"
+          value={photoTitle}
+          onChange={handlePhotoTitleChange}
+        />
+        <input
+          type="text"
           placeholder="Comentario sobre la foto"
           value={photoComment}
           onChange={handlePhotoCommentChange}
@@ -432,6 +455,12 @@ const HighlightedStories = () => {
             id="photo-file"
             style={{ display: 'none' }}
             onChange={(e) => handlePhotoChange(e, selectedStory.id)}
+          />
+          <input
+            type="text"
+            placeholder="Título de la foto"
+            value={photoTitle}
+            onChange={handlePhotoTitleChange}
           />
           <input
             type="text"
