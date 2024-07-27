@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa';
-import '../../styles/detail/imageModalDetail.scss';
+import '../../styles/detail/imageDetail.scss';
 
-const ImageModalDetail = ({ isOpen, photos, currentPhotoIndex, onClose, onNext, onPrev }) => {
+const ImageDetail = ({ isOpen, photos, currentPhotoIndex, onClose, onNext, onPrev }) => {
   if (!isOpen) return null;
 
   const formatDate = (dateString) => {
@@ -59,4 +59,4 @@ const ImageModalDetail = ({ isOpen, photos, currentPhotoIndex, onClose, onNext, 
   );
 };
 
-export default ImageModalDetail;
+export default ImageDetail;

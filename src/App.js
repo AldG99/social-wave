@@ -9,7 +9,7 @@ import Chat from "./components/chat/chat";
 import Detail from "./components/detail/detail";
 import List from "./components/chat/list";
 import Notification from "./components/notification/notification";
-import MainUserInfo from "./components/user/mainUserInfo";
+import MainInfo from "./components/user/mainInfo";
 import UserDetail from "./components/detail/userDetail";
 
 const App = () => {
@@ -57,7 +57,7 @@ const App = () => {
                   <Detail onProfileClick={handleShowUserDetail} />
                 </>
               ) : (
-                <MainUserInfo onProfileClick={handleShowUserDetail} />
+                <MainInfo onProfileClick={handleShowUserDetail} />
               )}
             </>
           ) : (

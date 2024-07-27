@@ -50,20 +50,6 @@
     }
   }
 
-  .addStory, .addPhotoLabel {
-    cursor: pointer;
-    font-size: 24px;
-    color: #555;
-  }
-
-  .addStory input[type="text"] {
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 4px;
-    width: calc(100% - 16px);
-  }
-
   button {
     margin-top: 8px;
     padding: 4px 8px;

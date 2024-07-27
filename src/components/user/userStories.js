@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
-import '../../styles/user/highlightedStories.scss';
+import '../../styles/user/userStories.scss';
 import { db, storage } from '../../lib/firebaseConfig';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useUserStore } from '../../lib/userStore';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import ImageModal from './imageModal';
 
-const HighlightedStories = () => {
+const UserStories = () => {
   const { currentUser } = useUserStore();
+  const [formVisible, setFormVisible] = useState(false);
   const [stories, setStories] = useState([]);
   const [newStory, setNewStory] = useState(null);
   const [newStoryCover, setNewStoryCover] = useState(null);
@@ -340,48 +341,55 @@ const HighlightedStories = () => {
     <div className="highlightedStories">
       <h3>Historias Destacadas</h3>
       <div className="addStory">
-        <input
-          type="file"
-          id="story-cover"
-          style={{ display: 'none' }}
-          onChange={handleCoverChange}
-        />
-        <label htmlFor="story-cover" className="addStoryLabel">
-          <FaPlus /> Portada
-        </label>
-        <input
-          type="file"
-          id="story-file"
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
-        <label htmlFor="story-file" className="addStoryLabel">
-          <FaPlus /> Historia
-        </label>
-        <input
-          type="text"
-          placeholder="Nombre de la historia"
-          value={newStoryName}
-          onChange={handleNameChange}
-        />
-        <input
-          type="text"
-          placeholder="Título de la foto"
-          value={photoTitle}
-          onChange={handlePhotoTitleChange}
-        />
-        <input
-          type="text"
-          placeholder="Comentario sobre la foto"
-          value={photoComment}
-          onChange={handlePhotoCommentChange}
-        />
-        {newStory && newStoryCover && (
-          <button onClick={addStory} disabled={loading}>
-            {loading ? 'Guardando...' : 'Guardar Historia'}
-          </button>
-        )}
-      </div>
+      <button onClick={() => setFormVisible(!formVisible)} className="toggleFormButton">
+        Agregar Nueva Historia
+      </button>
+      {formVisible && (
+        <>
+          <input
+            type="file"
+            id="story-cover"
+            style={{ display: 'none' }}
+            onChange={handleCoverChange}
+          />
+          <label htmlFor="story-cover" className="addStoryLabel">
+            <FaPlus /> Portada
+          </label>
+          <input
+            type="file"
+            id="story-file"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
+          <label htmlFor="story-file" className="addStoryLabel">
+            <FaPlus /> Historia
+          </label>
+          <input
+            type="text"
+            placeholder="Nombre de la historia"
+            value={newStoryName}
+            onChange={handleNameChange}
+          />
+          <input
+            type="text"
+            placeholder="Título de la foto"
+            value={photoTitle}
+            onChange={handlePhotoTitleChange}
+          />
+          <input
+            type="text"
+            placeholder="Comentario sobre la foto"
+            value={photoComment}
+            onChange={handlePhotoCommentChange}
+          />
+          {newStory && newStoryCover && (
+            <button onClick={addStory} disabled={loading}>
+              {loading ? 'Guardando...' : 'Guardar Historia'}
+            </button>
+          )}
+        </>
+      )}
+    </div>
       <div className="stories">
         {stories.map((story, index) => (
           <div key={index} className="story">
@@ -493,4 +501,4 @@ const HighlightedStories = () => {
   );
 };
 
-export default HighlightedStories;
+export default UserStories;

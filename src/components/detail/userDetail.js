@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useChatStore } from "../../lib/chatStore";
 import { db } from "../../lib/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import HighlightedStoriesUserDetail from "./HighlightedStoriesUserDetail";
+import StoriesDetail from "./storiesDetail";
 import "../../styles/detail/userDetail.scss";
 
 const continentNames = {
@@ -62,7 +62,7 @@ const UserDetail = ({ handleBackToChat }) => {
         <p>{presentation}</p>
         <button onClick={handleBackToChat}>Regresar</button>
       </div>
-      <HighlightedStoriesUserDetail stories={highlightedStories} />
+      <StoriesDetail stories={highlightedStories} />
     </div>
   );
 };

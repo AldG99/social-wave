@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaTimes } from 'react-icons/fa';
-import ImageModalDetail from './imageModalDetail';
-import "../../styles/detail/storiesUserDetail.scss"
+import ImageDetail from './imageDetail';
+import "../../styles/detail/storiesDetail.scss"
 
-const HighlightedStoriesUserDetail = ({ stories }) => {
+const StoriesDetail = ({ stories }) => {
   const [selectedStory, setSelectedStory] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,7 +74,7 @@ const HighlightedStoriesUserDetail = ({ stories }) => {
         </div>
       )}
       {isModalOpen && selectedStory && (
-        <ImageModalDetail
+        <ImageDetail
           isOpen={isModalOpen}
           photos={selectedStory.photos}
           currentPhotoIndex={currentPhotoIndex}
@@ -87,4 +87,4 @@ const HighlightedStoriesUserDetail = ({ stories }) => {
   );
 };
 
-export default HighlightedStoriesUserDetail;
+export default StoriesDetail;

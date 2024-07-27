@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useUserStore } from "../../lib/userStore";
 import { FaSave, FaUserCircle } from "react-icons/fa";
-import "../../styles/user/mainUserInfo.scss";
+import "../../styles/user/mainInfo.scss";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../lib/firebaseConfig";
 import upload from "../../lib/upload";
-import HighlightedStories from "./highlightedStories";
+import UserStories from "./userStories";
 
 const continentNames = {
   africa: "África",
@@ -112,7 +112,7 @@ const MainUserInfo = () => {
       <button className="logout" onClick={() => auth.signOut()}>
           Salir
         </button>
-      <HighlightedStories />
+      <UserStories />
     </div>
   );
 };
