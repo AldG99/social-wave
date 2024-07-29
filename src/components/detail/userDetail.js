@@ -16,7 +16,7 @@ const continentNames = {
 
 const UserDetail = ({ handleBackToChat }) => {
   const [presentation, setPresentation] = useState("");
-  const [highlightedStories, setHighlightedStories] = useState([]);
+  const [newStories, setNewStories] = useState([]);
   const { user } = useChatStore();
   
   const userDetailRef = useRef(null);
@@ -29,7 +29,7 @@ const UserDetail = ({ handleBackToChat }) => {
         const userDoc = await getDoc(doc(db, "users", user.id));
         if (userDoc.exists()) {
           setPresentation(userDoc.data().presentation || "Hola a Todos!");
-          setHighlightedStories(userDoc.data().highlightedStories || []);
+          setNewStories(userDoc.data().newStories || []);
         }
       } catch (err) {
         console.log(err);
@@ -62,7 +62,7 @@ const UserDetail = ({ handleBackToChat }) => {
         <p>{presentation}</p>
         <button onClick={handleBackToChat}>Regresar</button>
       </div>
-      <StoriesDetail stories={highlightedStories} />
+      <StoriesDetail stories={newStories} />
     </div>
   );
 };

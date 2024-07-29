@@ -34,7 +34,7 @@ const StoriesDetail = ({ stories }) => {
   };
 
   return (
-    <div className="hs-highlightedStories">
+    <div className="hs-newStories">
       <div className="hs-stories">
         {stories.length > 0 ? (
           stories.map((story, index) => (

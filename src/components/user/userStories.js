@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaRegSquarePlus } from "react-icons/fa6";
 import '../../styles/user/userStories.scss';
 import { db, storage } from '../../lib/firebaseConfig';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -9,9 +10,7 @@ import ImageModal from './imageModal';
 
 const UserStories = () => {
   const { currentUser } = useUserStore();
-  const [formVisible, setFormVisible] = useState(false);
   const [stories, setStories] = useState([]);
-  const [newStory, setNewStory] = useState(null);
   const [newStoryCover, setNewStoryCover] = useState(null);
   const [newStoryName, setNewStoryName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,29 +19,21 @@ const UserStories = () => {
   const [editStoryCover, setEditStoryCover] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
   const [photoTitle, setPhotoTitle] = useState("");
   const [photoComment, setPhotoComment] = useState("");
   const [newPhoto, setNewPhoto] = useState(null);
+  const [isAddingStory, setIsAddingStory] = useState(false);
 
   useEffect(() => {
     const fetchStories = async () => {
       if (!currentUser?.id) return;
       const userDoc = await getDoc(doc(db, 'users', currentUser.id));
       if (userDoc.exists()) {
-        setStories(userDoc.data().highlightedStories || []);
+        setStories(userDoc.data().newStories || []);
       }
     };
     fetchStories();
   }, [currentUser]);
-
-  const handleFileChange = (e) => {
-    if (e.target.files[0] && e.target.files[0].type.startsWith('image/')) {
-      setNewStory(e.target.files[0]);
-    } else {
-      alert('Por favor, seleccione un archivo de imagen válido');
-    }
-  };
 
   const handleCoverChange = (e) => {
     if (e.target.files[0] && e.target.files[0].type.startsWith('image/')) {
@@ -59,9 +50,9 @@ const UserStories = () => {
   const handlePhotoTitleChange = (e) => {
     const title = e.target.value;
     if (title.length <= 40) {
-        setPhotoTitle(title);
+      setPhotoTitle(title);
     } else {
-        alert('El título no puede exceder los 60 caracteres.');
+      alert('El título no puede exceder los 40 caracteres.');
     }
   };
 
@@ -70,23 +61,21 @@ const UserStories = () => {
     if (comment.length <= 260) {
       setPhotoComment(comment);
     } else {
-      alert('El comentario no puede exceder los 340 caracteres.');
+      alert('El comentario no puede exceder los 260 caracteres.');
     }
-  };  
+  };
 
   const addStory = async () => {
-    if (!newStory || !newStoryCover || !newStoryName.trim()) {
-      alert('Por favor, complete todos los campos.');
+    if (!newStoryCover || !newStoryName.trim()) {
+      alert('Por favor, complete todos los campos: portada y nombre de la historia.');
       return;
     }
 
     setLoading(true);
     const date = new Date().toISOString();
     const coverRef = ref(storage, `stories/${currentUser.id}/${date}-${newStoryCover.name}`);
-    const storyRef = ref(storage, `stories/${currentUser.id}/${date}-${newStory.name}`);
 
     const coverUploadTask = uploadBytesResumable(coverRef, newStoryCover);
-    const storyUploadTask = uploadBytesResumable(storyRef, newStory);
 
     coverUploadTask.on(
       'state_changed',
@@ -100,40 +89,24 @@ const UserStories = () => {
       },
       async () => {
         const coverURL = await getDownloadURL(coverUploadTask.snapshot.ref);
-        storyUploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-          },
-          (error) => {
-            console.error('Upload error: ', error);
-            setLoading(false);
-          },
-          async () => {
-            const storyURL = await getDownloadURL(storyUploadTask.snapshot.ref);
-            try {
-              const newStoryData = {
-                id: date,
-                name: newStoryName.trim(),
-                cover: coverURL,
-                photos: [{ url: storyURL, uploadedAt: date, title: photoTitle, comment: photoComment }],
-              };
-              await updateDoc(doc(db, 'users', currentUser.id), {
-                highlightedStories: arrayUnion(newStoryData),
-              });
-              setStories((prev) => [...prev, newStoryData]);
-              setNewStory(null);
-              setNewStoryCover(null);
-              setNewStoryName("");
-              setPhotoTitle("");
-              setPhotoComment(""); // Limpiar el comentario
-            } catch (error) {
-              console.error('Error saving story: ', error);
-            }
-            setLoading(false);
-          }
-        );
+        try {
+          const newStoryData = {
+            id: date,
+            name: newStoryName.trim(),
+            cover: coverURL,
+            photos: [],
+          };
+          await updateDoc(doc(db, 'users', currentUser.id), {
+            newStories: arrayUnion(newStoryData),
+          });
+          setStories((prev) => [...prev, newStoryData]);
+          setNewStoryCover(null);
+          setNewStoryName("");
+        } catch (error) {
+          console.error('Error saving story: ', error);
+        }
+        setLoading(false);
+        setIsAddingStory(false);
       }
     );
   };
@@ -163,12 +136,12 @@ const UserStories = () => {
           const newPhotoData = {
             url: downloadURL,
             uploadedAt: date,
-            title: photoTitle, // Añadir título
-            comment: photoComment, // Añadir comentario
+            title: photoTitle,
+            comment: photoComment,
           };
           updatedStories[storyIndex].photos.push(newPhotoData);
           await updateDoc(doc(db, 'users', currentUser.id), {
-            highlightedStories: updatedStories,
+            newStories: updatedStories,
           });
           setStories(updatedStories);
           setSelectedStory(null);
@@ -196,7 +169,7 @@ const UserStories = () => {
       updatedStories[storyIndex].photos.splice(photoIndex, 1);
 
       await updateDoc(doc(db, 'users', currentUser.id), {
-        highlightedStories: updatedStories,
+        newStories: updatedStories,
       });
       setStories(updatedStories);
     } catch (error) {
@@ -258,7 +231,7 @@ const UserStories = () => {
           updatedStories[storyIndex].cover = coverURL;
           try {
             await updateDoc(doc(db, 'users', currentUser.id), {
-              highlightedStories: updatedStories,
+              newStories: updatedStories,
             });
             setStories(updatedStories);
             setSelectedStory(null);
@@ -273,7 +246,7 @@ const UserStories = () => {
     } else {
       try {
         await updateDoc(doc(db, 'users', currentUser.id), {
-          highlightedStories: updatedStories,
+          newStories: updatedStories,
         });
         setStories(updatedStories);
         setSelectedStory(null);
@@ -286,37 +259,31 @@ const UserStories = () => {
   };
 
   const deleteStory = async () => {
-    if (!selectedStory) return;
-
     setLoading(true);
     try {
-      // Eliminar fotos del almacenamiento
-      await Promise.all(selectedStory.photos.map(async (photo) => {
+      const storyIndex = stories.findIndex((story) => story.id === selectedStory.id);
+      const storyToDelete = stories[storyIndex];
+      const updatedStories = stories.filter((story) => story.id !== selectedStory.id);
+
+      if (storyToDelete.cover) {
+        const coverRef = ref(storage, storyToDelete.cover);
+        await deleteObject(coverRef);
+      }
+
+      for (const photo of storyToDelete.photos) {
         const photoRef = ref(storage, photo.url);
         await deleteObject(photoRef);
-      }));
+      }
 
-      // Eliminar la historia de la base de datos
-      const updatedStories = stories.filter((story) => story.id !== selectedStory.id);
       await updateDoc(doc(db, 'users', currentUser.id), {
-        highlightedStories: updatedStories,
+        newStories: updatedStories,
       });
-
       setStories(updatedStories);
       setSelectedStory(null);
     } catch (error) {
       console.error('Error deleting story: ', error);
     }
     setLoading(false);
-  };
-
-  const countPhotos = (story) => {
-    return story.photos.length;
-  };
-
-  const truncateText = (text, maxLength) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
   };
 
   const openImageModal = (story, index) => {
@@ -337,59 +304,42 @@ const UserStories = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex - 1 + selectedStory.photos.length) % selectedStory.photos.length);
   };
 
+  const truncateText = (text, length) => {
+    return text.length > length ? `${text.substring(0, length)}...` : text;
+  };
+
   return (
-    <div className="highlightedStories">
-      <h3>Historias Destacadas</h3>
-      <div className="addStory">
-      <button onClick={() => setFormVisible(!formVisible)} className="toggleFormButton">
-        Agregar Nueva Historia
-      </button>
-      {formVisible && (
-        <>
-          <input
-            type="file"
-            id="story-cover"
-            style={{ display: 'none' }}
-            onChange={handleCoverChange}
-          />
-          <label htmlFor="story-cover" className="addStoryLabel">
-            <FaPlus /> Portada
-          </label>
-          <input
-            type="file"
-            id="story-file"
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-          />
-          <label htmlFor="story-file" className="addStoryLabel">
-            <FaPlus /> Historia
-          </label>
-          <input
-            type="text"
-            placeholder="Nombre de la historia"
-            value={newStoryName}
-            onChange={handleNameChange}
-          />
-          <input
-            type="text"
-            placeholder="Título de la foto"
-            value={photoTitle}
-            onChange={handlePhotoTitleChange}
-          />
-          <input
-            type="text"
-            placeholder="Comentario sobre la foto"
-            value={photoComment}
-            onChange={handlePhotoCommentChange}
-          />
-          {newStory && newStoryCover && (
-            <button onClick={addStory} disabled={loading}>
-              {loading ? 'Guardando...' : 'Guardar Historia'}
-            </button>
-          )}
-        </>
-      )}
-    </div>
+    <div className="newStories">
+      <h3>Mis Historias</h3>
+      <div
+        className="addStoryIcon"
+        onClick={() => setIsAddingStory(!isAddingStory)}
+      >
+        <FaRegSquarePlus />
+      </div>
+      <div className={`addStory ${isAddingStory ? 'active' : ''}`}>
+        <input
+          type="file"
+          id="story-cover"
+          style={{ display: 'none' }}
+          onChange={handleCoverChange}
+        />
+        <label htmlFor="story-cover" className="addStoryLabel">
+          <FaPlus /> Portada
+        </label>
+        <input
+          type="text"
+          placeholder="Nombre de la historia"
+          value={newStoryName}
+          onChange={handleNameChange}
+        />
+        <button
+          onClick={addStory}
+          disabled={!newStoryCover || !newStoryName.trim() || loading}
+        >
+          {loading ? 'Guardando...' : 'Guardar Historia'}
+        </button>
+      </div>
       <div className="stories">
         {stories.map((story, index) => (
           <div key={index} className="story">
@@ -414,12 +364,13 @@ const UserStories = () => {
           </button>
           <h4>{selectedStory.name}</h4>
           <div>
-            <strong>Número de fotos:</strong> {countPhotos(selectedStory)}
+            <strong>Número de fotos:</strong> {selectedStory.photos.length}
           </div>
           <input
             type="text"
             value={editStoryName}
             onChange={handleEditStoryNameChange}
+            placeholder="Nombre de la historia"
           />
           <input
             type="file"
@@ -435,7 +386,7 @@ const UserStories = () => {
           </button>
           <button
             className="deleteStoryButton"
-            onClick={deleteStory} // Aquí estamos utilizando deleteStory
+            onClick={deleteStory}
             disabled={loading}
           >
             {loading ? 'Eliminando...' : 'Eliminar Historia destacada'}
@@ -448,7 +399,7 @@ const UserStories = () => {
                   alt={`story-photo-${index}`}
                   onClick={() => openImageModal(selectedStory, index)}
                 />
-                <div className="photo-comment">{photo.comment}</div> {/* Mostrar comentario */}
+                <div className="photo-comment">{photo.comment}</div>
                 <button
                   className="delete-photo-button"
                   onClick={() => deletePhotoFromStory(selectedStory.id, photo.url)}
@@ -487,6 +438,7 @@ const UserStories = () => {
           </button>
         </div>
       )}
+
       {isModalOpen && selectedStory && (
         <ImageModal
           isOpen={isModalOpen}
