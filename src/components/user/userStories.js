@@ -340,22 +340,26 @@ const UserStories = () => {
           {loading ? 'Guardando...' : 'Guardar Historia'}
         </button>
       </div>
-      <div className="stories">
-        {stories.map((story, index) => (
-          <div key={index} className="story">
-            <div className="story-image-container" onClick={() => handleStoryClick(story)}>
-              {story.cover && (
-                <img
-                  src={story.cover}
-                  alt={`story-cover-${index}`}
-                />
-              )}
-            </div>
-            <div className="story-name">
-              {truncateText(story.name, 7)}
-            </div>
+      <div className="newStories">
+        <div className="stories-container">
+          <div className="stories">
+            {stories.map((story, index) => (
+              <div key={index} className="story">
+                <div className="story-image-container" onClick={() => handleStoryClick(story)}>
+                  {story.cover && (
+                    <img
+                      src={story.cover}
+                      alt={`story-cover-${index}`}
+                    />
+                  )}
+                </div>
+                <div className="story-name">
+                  {truncateText(story.name, 7)}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
       {selectedStory && (
         <div className="story-details">
