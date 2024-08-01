@@ -23,6 +23,10 @@ const UserStories = () => {
   const [photoComment, setPhotoComment] = useState("");
   const [newPhoto, setNewPhoto] = useState(null);
   const [isAddingStory, setIsAddingStory] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const ITEMS_PER_PAGE = 6;
+
+
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -42,6 +46,23 @@ const UserStories = () => {
       alert('Por favor, seleccione un archivo de imagen válido');
     }
   };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(stories.length / ITEMS_PER_PAGE) - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const currentStories = stories.slice(
+    currentPage * ITEMS_PER_PAGE,
+    (currentPage + 1) * ITEMS_PER_PAGE
+  );
 
   const handleNameChange = (e) => {
     setNewStoryName(e.target.value);
@@ -310,7 +331,6 @@ const UserStories = () => {
 
   return (
     <div className="newStories">
-      <h3>Mis Historias</h3>
       <div
         className="addStoryIcon"
         onClick={() => setIsAddingStory(!isAddingStory)}
@@ -340,25 +360,39 @@ const UserStories = () => {
           {loading ? 'Guardando...' : 'Guardar Historia'}
         </button>
       </div>
-      <div className="newStories">
-        <div className="stories-container">
-          <div className="stories">
-            {stories.map((story, index) => (
-              <div key={index} className="story">
-                <div className="story-image-container" onClick={() => handleStoryClick(story)}>
-                  {story.cover && (
-                    <img
-                      src={story.cover}
-                      alt={`story-cover-${index}`}
-                    />
-                  )}
-                </div>
-                <div className="story-name">
-                  {truncateText(story.name, 7)}
-                </div>
+      <div className="pagination-controls">
+        <button
+          className="pagination-button"
+          onClick={handlePrevPage}
+          disabled={currentPage === 0}
+        >
+          &lt;
+        </button>
+        <button
+          className="pagination-button"
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(stories.length / ITEMS_PER_PAGE) - 1}
+        >
+          &gt;
+        </button>
+      </div>
+      <div className="stories-container">
+        <div className="stories">
+          {currentStories.map((story, index) => (
+            <div key={index} className="story">
+              <div className="story-image-container" onClick={() => handleStoryClick(story)}>
+                {story.cover && (
+                  <img
+                    src={story.cover}
+                    alt={`story-cover-${index}`}
+                  />
+                )}
               </div>
-            ))}
-          </div>
+              <div className="story-name">
+                {truncateText(story.name, 7)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       {selectedStory && (
@@ -442,7 +476,6 @@ const UserStories = () => {
           </button>
         </div>
       )}
-
       {isModalOpen && selectedStory && (
         <ImageModal
           isOpen={isModalOpen}

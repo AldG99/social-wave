@@ -93,16 +93,41 @@
     }
   }
 
-  .stories-container {
-    margin-left: 150px;
-    margin-right: 150px;    
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 20px;
 
+    .pagination-button {
+      background: none; // Sin fondo
+      border: none; // Sin borde
+      color: #1effe1; // Color del texto (flechas)
+      font-size: 30px; // Tamaño de la fuente para las flechas
+      cursor: pointer;
+      padding: 0; // Sin padding adicional
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: rgb(255, 0, 136); // Color de texto al pasar el cursor
+      }
+
+      &:disabled {
+        color: #b0b0b0; // Color del texto cuando está deshabilitado
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .stories-container {
+    position: relative;
+  
     .stories {
       display: flex;
-      flex-wrap: wrap;
+      grid-template-columns: repeat(6, 1fr); // Asegura 4 ítems por fila
+      gap: 20px 20px; // Espacio entre las filas y columnas
       justify-content: center;
-      row-gap: 20px;
-      column-gap: 35px;
     }
   
     .story {
@@ -148,6 +173,7 @@
       }
     }
   }
+  
 
   button {
     margin-top: 8px;
