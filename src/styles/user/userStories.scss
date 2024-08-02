@@ -314,14 +314,14 @@
         justify-content: center;
         margin: 10px 0;
         padding: 10px 20px;
-        background: #95ff00;
+        background: #ffb6b9;
         border-radius: 5px;
         color: #fff;
         cursor: pointer;
         transition: background 0.3s ease;
     
         &:hover {
-          background: #00ffcc;
+          background: #01dfb3;
         }
     
         svg {
@@ -376,7 +376,7 @@
         transition: background 0.3s ease;
     
         &:hover {
-          background: #00ffcc;
+          background: #00b3ff;
         }
     
         &:disabled {

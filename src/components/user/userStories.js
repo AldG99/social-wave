@@ -26,6 +26,7 @@ const UserStories = () => {
   const [isAddingStory, setIsAddingStory] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [previewImage, setPreviewImage] = useState(null);
+  const [showAddPhotoOptions, setShowAddPhotoOptions] = useState(false);
   const ITEMS_PER_PAGE = 6;
 
   useEffect(() => {
@@ -472,34 +473,44 @@ const UserStories = () => {
           ))}
         </div>
         <div className="add-photo">
-          <input
-            type="file"
-            id="photo-file"
-            style={{ display: 'none' }}
-            onChange={(e) => handlePhotoChange(e, selectedStory.id)}
-          />
-          <label htmlFor="photo-file" className="addPhotoLabel">
-            <MdOutlineAddPhotoAlternate /> Agregar foto
-          </label>
-          <input
-            type="text"
-            placeholder="Título de la foto"
-            value={photoTitle}
-            onChange={handlePhotoTitleChange}
-            className="title-photo"
-          />
-          <textarea
-            placeholder="Comentario sobre la foto"
-            value={photoComment}
-            onChange={handlePhotoCommentChange}
-            className="textarea-comment"
-          />
           <button
-            onClick={() => newPhoto && addPhotoToStory(selectedStory.id, newPhoto)}
-            disabled={loading}
+            onClick={() => setShowAddPhotoOptions(!showAddPhotoOptions)}
+            className="toggle-add-photo-button"
           >
-            {loading ? 'Guardando...' : 'Guardar Foto'}
+           {showAddPhotoOptions ? 'Cancelar' : 'Agregar Foto'}
           </button>
+          {showAddPhotoOptions && (
+            <>
+              <input
+                type="file"
+                id="photo-file"
+                style={{ display: 'none' }}
+                onChange={(e) => handlePhotoChange(e, selectedStory.id)}
+              />
+              <label htmlFor="photo-file" className="addPhotoLabel">
+                <MdOutlineAddPhotoAlternate /> Agregar foto
+              </label>
+              <input
+                type="text"
+                placeholder="Título de la foto"
+                value={photoTitle}
+                onChange={handlePhotoTitleChange}
+                className="title-photo"
+              />
+              <textarea
+                placeholder="Comentario sobre la foto"
+                value={photoComment}
+                onChange={handlePhotoCommentChange}
+                className="textarea-comment"
+              />
+              <button
+                onClick={() => newPhoto && addPhotoToStory(selectedStory.id, newPhoto)}
+                disabled={loading}
+              >
+                {loading ? 'Guardando...' : 'Guardar Foto'}
+              </button>
+            </>
+          )}
         </div>
       </div>
       )}
