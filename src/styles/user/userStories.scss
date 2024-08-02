@@ -30,16 +30,16 @@
     padding: 75px;
     z-index: 10;
     transition: bottom 0.3s ease-in-out;
-
+  
     &.active {
       bottom: 0;
     }
-
+  
     input[type="file"] {
       display: none;
     }
-
-    label {
+  
+    .addStoryLabel {
       background: #00bcd4;
       color: #fff;
       padding: 10px 20px;
@@ -49,12 +49,19 @@
       align-items: center;
       cursor: pointer;
       margin-bottom: 10px;
-
+  
       svg {
         margin-right: 8px;
       }
     }
-
+  
+    .previewImage {
+      width: 100%;
+      max-width: 200px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+  
     input[type="text"] {
       border: 1px solid #00bcd4;
       border-radius: 25px;
@@ -64,13 +71,13 @@
       margin-bottom: 10px;
       width: 100%;
       transition: background 0.3s ease;
-
+  
       &:focus {
         background: #444;
         outline: none;
       }
     }
-
+  
     button {
       padding: 10px 20px;
       border: none;
@@ -80,18 +87,18 @@
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
-
+  
       &:disabled {
         background: #666;
         cursor: not-allowed;
       }
-
+  
       &:hover {
         background: #ff4081;
         transform: scale(1.05);
       }
     }
-  }
+  }  
 
   .pagination-controls {
     display: flex;
@@ -174,7 +181,6 @@
     }
   }
   
-
   button {
     margin-top: 8px;
     padding: 4px 8px;
@@ -197,7 +203,7 @@
     transform: translate(-50%, -50%);
     padding: 20px;
     border-radius: 8px;
-    background-color: #ffced2;
+    background-color: #fae3d9; /* Cambiado a un color de la paleta */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     width: 90%;
@@ -209,9 +215,13 @@
       color: #333;
     }
 
+    .photos-count {
+      color: #3498db; // El color que desees
+    }
+
     input[type="text"] {
       margin-bottom: 10px;
-      border: 1px solid #ddd;
+      border: 1px solid #61C0BF; /* Cambiado a un color de la paleta */
       border-radius: 4px;
       padding: 6px;
       width: calc(100% - 16px);
@@ -221,13 +231,13 @@
     .editCoverLabel, .addPhotoLabel {
       cursor: pointer;
       font-size: 18px;
-      color: #007bff;
+      color: #4BBCF4; /* Cambiado a un color de la paleta */
       margin-top: 10px;
       display: block;
       text-align: center;
 
       &:hover {
-        color: #0056b3;
+        color: #61C0BF; /* Cambiado a un color de la paleta */
       }
     }
 
@@ -252,6 +262,7 @@
           width: 100%;
           height: 100%;
           object-fit: cover;
+          border-radius: 4px;
         }
 
         .photo-date {
@@ -269,7 +280,7 @@
           position: absolute;
           top: 4px;
           right: 4px;
-          background: rgba(255, 0, 0, 0.7);
+          background: rgba(255, 182, 185, 0.7); /* Cambiado a un color de la paleta */
           color: #fff;
           border: none;
           border-radius: 50%;
@@ -284,13 +295,94 @@
       padding: 6px 12px;
       border: none;
       border-radius: 4px;
-      background-color: #007bff;
+      background-color: #4BBCF4; /* Cambiado a un color de la paleta */
       color: #fff;
       cursor: pointer;
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #0056b3;
+        background-color: #61C0BF; /* Cambiado a un color de la paleta */
+      }
+    }
+
+    .add-photo {
+      display: flex;
+      flex-direction: column;
+
+      .addPhotoLabel {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+        padding: 10px 20px;
+        background: #95ff00;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    
+        &:hover {
+          background: #00ffcc;
+        }
+    
+        svg {
+          margin-right: 5px;
+        }
+      }
+
+      .title-photo {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        resize: none;
+        overflow: auto;
+        
+        &:focus {
+          border-color: #007BFF;
+          outline: none;
+        }
+      }
+      
+      .textarea-comment {
+        width: 100%;
+        height: 120px;
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        resize: none;
+        overflow: auto;
+        
+        &:focus {
+          border-color: #007BFF;
+          outline: none;
+        }
+      }
+    
+      button {
+        align-self: flex-start; /* Alinea el botón a la izquierda */
+        width: 100%; /* Hace que el botón abarque todo el espacio disponible */
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #00ccff;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s ease;
+    
+        &:hover {
+          background: #00ffcc;
+        }
+    
+        &:disabled {
+          background: #555;
+          cursor: not-allowed;
+        }
       }
     }
   }

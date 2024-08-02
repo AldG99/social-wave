@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaTimes, FaPlus, FaTrash, FaEdit, FaSave } from 'react-icons/fa';
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import '../../styles/user/userStories.scss';
 import { db, storage } from '../../lib/firebaseConfig';
@@ -24,9 +25,8 @@ const UserStories = () => {
   const [newPhoto, setNewPhoto] = useState(null);
   const [isAddingStory, setIsAddingStory] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [previewImage, setPreviewImage] = useState(null);
   const ITEMS_PER_PAGE = 6;
-
-
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -40,8 +40,14 @@ const UserStories = () => {
   }, [currentUser]);
 
   const handleCoverChange = (e) => {
-    if (e.target.files[0] && e.target.files[0].type.startsWith('image/')) {
-      setNewStoryCover(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setNewStoryCover(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
       alert('Por favor, seleccione un archivo de imagen válido');
     }
@@ -329,6 +335,12 @@ const UserStories = () => {
     return text.length > length ? `${text.substring(0, length)}...` : text;
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+  };
+
   return (
     <div className="newStories">
       <div
@@ -347,6 +359,9 @@ const UserStories = () => {
         <label htmlFor="story-cover" className="addStoryLabel">
           <FaPlus /> Portada
         </label>
+        {previewImage && (
+          <img src={previewImage} alt="Vista previa de la portada" className="previewImage" />
+        )}
         <input
           type="text"
           placeholder="Nombre de la historia"
@@ -396,14 +411,19 @@ const UserStories = () => {
         </div>
       </div>
       {selectedStory && (
-        <div className="story-details">
-          <button className="close-button" onClick={() => setSelectedStory(null)}>
-            <FaTimes />
-          </button>
-          <h4>{selectedStory.name}</h4>
-          <div>
-            <strong>Número de fotos:</strong> {selectedStory.photos.length}
-          </div>
+      <div className="story-details">
+        <button className="close-button" onClick={() => setSelectedStory(null)}>
+          <FaTimes />
+        </button>
+        <h4>{selectedStory.name}</h4>
+        <div className="photos-count">
+          <strong>Número de fotos:</strong> {selectedStory.photos.length}
+        </div>
+        <button onClick={toggleEditing}>
+          {isEditing ? 'Cancelar' : <FaEdit />} Editar historias
+        </button>
+        {isEditing && (
+        <>
           <input
             type="text"
             value={editStoryName}
@@ -420,61 +440,68 @@ const UserStories = () => {
             <FaPlus /> Cambiar portada
           </label>
           <button onClick={saveEditedStoryNameAndCover}>
-            Guardar Cambios
+            <FaSave />
           </button>
           <button
             className="deleteStoryButton"
             onClick={deleteStory}
             disabled={loading}
           >
-            {loading ? 'Eliminando...' : 'Eliminar Historia destacada'}
+            {loading ? 'Eliminando...' : <FaTrash />}
           </button>
-          <div className="photos">
-            {selectedStory.photos.map((photo, index) => (
-              <div key={index} className="photo-container">
-                <img
-                  src={photo.url}
-                  alt={`story-photo-${index}`}
-                  onClick={() => openImageModal(selectedStory, index)}
-                />
-                <div className="photo-comment">{photo.comment}</div>
+        </>
+      )}
+      <div className="photos">
+        {selectedStory.photos.map((photo, index) => (
+          <div key={index} className="photo-container">
+            <img
+              src={photo.url}
+              alt={`story-photo-${index}`}
+              onClick={() => openImageModal(selectedStory, index)}
+            />
+            <div className="photo-comment">{photo.comment}</div>
+              {isEditing && (
                 <button
                   className="delete-photo-button"
                   onClick={() => deletePhotoFromStory(selectedStory.id, photo.url)}
                 >
                   <FaTrash />
                 </button>
-              </div>
-            ))}
-          </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="add-photo">
           <input
             type="file"
             id="photo-file"
             style={{ display: 'none' }}
             onChange={(e) => handlePhotoChange(e, selectedStory.id)}
           />
+          <label htmlFor="photo-file" className="addPhotoLabel">
+            <MdOutlineAddPhotoAlternate /> Agregar foto
+          </label>
           <input
             type="text"
             placeholder="Título de la foto"
             value={photoTitle}
             onChange={handlePhotoTitleChange}
+            className="title-photo"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Comentario sobre la foto"
             value={photoComment}
             onChange={handlePhotoCommentChange}
+            className="textarea-comment"
           />
-          <label htmlFor="photo-file" className="addPhotoLabel">
-            <FaPlus /> Agregar foto
-          </label>
           <button
             onClick={() => newPhoto && addPhotoToStory(selectedStory.id, newPhoto)}
             disabled={loading}
           >
-            {loading ? 'Guardando...' : 'Agregar Foto'}
+            {loading ? 'Guardando...' : 'Guardar Foto'}
           </button>
         </div>
+      </div>
       )}
       {isModalOpen && selectedStory && (
         <ImageModal
