@@ -461,25 +461,27 @@ const UserStories = () => {
           </button>
         </>
       )}
-      <div className="photos">
-        {selectedStory.photos.map((photo, index) => (
-          <div key={index} className="photo-container">
-            <img
-              src={photo.url}
-              alt={`story-photo-${index}`}
-              onClick={() => openImageModal(selectedStory, index)}
-            />
-            <div className="photo-comment">{photo.comment}</div>
-              {isEditing && (
-                <button
-                  className="delete-photo-button"
-                  onClick={() => deletePhotoFromStory(selectedStory.id, photo.url)}
-                >
-                  <FaTrash />
-                </button>
-              )}
-            </div>
-          ))}
+      <div className="photos-container">
+        <div className="photos">
+          {selectedStory.photos.map((photo, index) => (
+            <div key={index} className="photo-container">
+              <img
+                src={photo.url}
+                alt={`story-photo-${index}`}
+                onClick={() => openImageModal(selectedStory, index)}
+              />
+              <div className="photo-comment">{photo.comment}</div>
+                {isEditing && (
+                  <button
+                    className="delete-photo-button"
+                    onClick={() => deletePhotoFromStory(selectedStory.id, photo.url)}
+                  >
+                    <FaTrash />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="add-photo">
           <button
