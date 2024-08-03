@@ -27,6 +27,7 @@ const UserStories = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [previewImage, setPreviewImage] = useState(null);
   const [showAddPhotoOptions, setShowAddPhotoOptions] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const ITEMS_PER_PAGE = 6;
 
   useEffect(() => {
@@ -336,10 +337,18 @@ const UserStories = () => {
     return text.length > length ? `${text.substring(0, length)}...` : text;
   };
 
-  const [isEditing, setIsEditing] = useState(false);
-
   const toggleEditing = () => {
     setIsEditing(!isEditing);
+    if (showAddPhotoOptions) {
+      setShowAddPhotoOptions(false);
+    }
+  };
+
+  const toggleAddPhotoOptions = () => {
+    setShowAddPhotoOptions(!showAddPhotoOptions);
+    if (isEditing) {
+      setIsEditing(false);
+    }
   };
 
   return (
@@ -474,10 +483,10 @@ const UserStories = () => {
         </div>
         <div className="add-photo">
           <button
-            onClick={() => setShowAddPhotoOptions(!showAddPhotoOptions)}
+            onClick={toggleAddPhotoOptions}
             className="toggle-add-photo-button"
           >
-           {showAddPhotoOptions ? 'Cancelar' : 'Agregar Foto'}
+            {showAddPhotoOptions ? 'Cancelar' : 'Agregar Foto'}
           </button>
           {showAddPhotoOptions && (
             <>
