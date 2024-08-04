@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FaPhone, FaVideo, FaInfoCircle, FaSmile, FaImage } from "react-icons/fa";
+import { FaSmile, FaImage } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
@@ -123,11 +123,6 @@ const Chat = () => {
             <span>{user?.username}</span>
             <p>{user?.subname}</p>
           </div>
-        </div>
-        <div className="icons">
-          <FaPhone className="icon" />
-          <FaVideo className="icon" />
-          <FaInfoCircle className="icon" />
         </div>
       </div>
       <div className="center">
