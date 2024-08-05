@@ -1,11 +1,9 @@
 **/src/lib/firebaseConfig.js
 
-**/src/components/auth/addUser.js
 **/src/components/auth/login.js
 **/src/components/auth/register.js
 **/src/components/auth/quotes/quotes.js
 
-**/src/styles/auth/addUser.scss
 **/src/styles/auth/login.scss
 **/src/styles/auth/register.scss
 

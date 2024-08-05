@@ -1,0 +1,138 @@
+.addUser {
+  position: fixed; // Asegura que esté sobrepuesto a otros elementos
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  padding: 30px;
+  background-color: rgb(255, 220, 190); // Rosa claro pastel
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); // Sombra más suave
+  z-index: 1000; // Asegura que esté sobrepuesto a otros elementos
+  color: #333; // Color de texto blanco suave
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+
+    input {
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #b9a0b1; // Rosa pastel
+      outline: none;
+      font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.2); // Fondo blanco muy sutil
+      color: #333; // Texto gris oscuro para contraste
+      transition: border 0.3s ease, background-color 0.3s ease;
+
+      &:focus {
+        border-color: #8ab4f8; // Azul pastel
+        background-color: rgba(255, 255, 255, 0.4); // Fondo blanco sutil al enfocar
+      }
+    }
+
+    button {
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #8ab4f8; // Azul claro pastel
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #6a8ebf; // Azul pastel más oscuro
+      }
+    }
+  }
+
+  .omega-code-container {
+    position: relative;
+
+    .info-icon {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #8ab4f8; // Color azul claro pastel
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #6a8ebf; // Color azul pastel más oscuro
+      }
+    }
+
+    .info-tooltip {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      background-color: rgba(0, 0, 0, 0.8); // Fondo negro translúcido
+      color: #fff; // Texto blanco
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Sombra ligera
+      z-index: 1001;
+      margin-top: 10px;
+
+      p {
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .user {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .detail {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background-color: rgba(242, 232, 255, 0.7); // Lavanda claro
+      border-radius: 12px;
+      margin-right: 20px;
+      padding: 10px;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Sombra más ligera
+      }
+
+      span {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333; // Gris oscuro
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background-color: #f28c8c; // Rosa pastel
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #d17474; // Rosa más oscuro
+      }
+    }
+  }
+}

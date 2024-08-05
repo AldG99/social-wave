@@ -109,7 +109,7 @@ const MainUserInfo = () => {
           )}
         </div>
         <h2>{currentUser?.username}</h2>
-        <h4>{currentUser?.subname}</h4>
+        <h4>{currentUser?.omegaCode}</h4>
         <h3>{continentNames[currentUser?.continent]}</h3>
         {isEditing ? (
           <div className="presentation-container">
