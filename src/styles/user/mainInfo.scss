@@ -1,6 +1,7 @@
 .mainUserInfo {
   flex: 3;
   background-color: rgba(145, 150, 220, 0.35);
+  position: relative;
 
   .user {
     padding: 30px 20px;
@@ -9,12 +10,43 @@
     align-items: center;
     gap: 2.5px;
 
-    img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      cursor: pointer;
+    .avatar-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+
+      .avatar-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: border 0.3s ease;
+
+        &.editing {
+          border: 4px solid rgba(255, 255, 255, 0.5);
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .avatarIcon {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      input {
+        display: none;
+      }
     }
 
     h2 {
@@ -41,8 +73,9 @@
     .presentation-container {
       width: 100%;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 10px;
+
       textarea {
         width: 100%;
         padding: 10px;
@@ -56,51 +89,67 @@
           border: 1px solid #999;
         }
       }
-
-      button {
-        background: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-
-        &:hover {
-          background: #45a049;
-        }
-      }
     }
 
     p {
-      cursor: pointer;
       color: #fff6ed;
       margin: 1rem 10rem;
       text-align: center;
-
-      &:hover {
-        color: #fff6edae;
-      }
     }
-
+    .button-container {
+      display: flex;
+      gap: 10px; /* Espacio entre los botones */
+      margin-top: 10px; /* Espacio arriba del contenedor si es necesario */
+    }
+    
     button {
-      background: #007bff;
+      background: #80deea; /* Azul celeste claro */
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 20px; /* Tamaño uniforme */
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px;
       transition: background 0.3s ease;
-
-      &:hover {
-        background: #0056b3;
-      }
-
-      &:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-      }
     }
+    
+    button:hover {
+      background: #4dd0e1; /* Azul más intenso para el hover */
+    }
+    
+    button:disabled {
+      background: #e0e0e0; /* Gris claro para el estado deshabilitado */
+      cursor: not-allowed;
+    }
+    
+    .cancel-btn {
+      background: #f48fb1; /* Rosa claro pastel */
+    }
+    
+    .cancel-btn:hover {
+      background: #f06292; /* Rosa más intenso para el hover */
+    }
+    
   }
+
+  .logout {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logout svg {
+    fill: #ff97d9;
+    width: 24px;
+    height: 24px;
+    transition: fill 0.3s ease; /* Añade la transición suave */
+  }
+  
+  .logout:hover svg {
+    fill: #b6f1ff;
+  }  
 }

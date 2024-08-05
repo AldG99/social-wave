@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUserStore } from "../../lib/userStore";
-import { FaSave, FaUserCircle } from "react-icons/fa";
+import { FaSave, FaUserCircle, FaEdit } from "react-icons/fa";
+import { IoIosLogOut } from 'react-icons/io';
 import "../../styles/user/mainInfo.scss";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../lib/firebaseConfig";
@@ -37,10 +38,16 @@ const MainUserInfo = () => {
       });
       setIsEditing(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Error al guardar la presentación.");
     }
     setLoading(false);
+  };
+
+  const handleCancelEditing = () => {
+    setPresentation(currentUser?.presentation || "Hola a Todos!");
+    setAvatar({ file: null, url: currentUser?.avatar || "" });
+    setIsEditing(false);
   };
 
   const handleAvatarChange = (e) => {
@@ -63,29 +70,44 @@ const MainUserInfo = () => {
         });
         setAvatar({ ...avatar, url: imgUrl, file: null });
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError("Error al guardar el avatar.");
       }
       setLoading(false);
     }
   };
 
+  const handleEditProfile = () => {
+    if (isEditing) {
+      handleSaveAvatar();
+      handleSavePresentation();
+    }
+    setIsEditing(!isEditing);
+  };
+
   return (
     <div className="mainUserInfo">
       <div className="user">
-        <label htmlFor="avatar-file" className="avatar-label">
-          {avatar.url ? (
-            <img src={avatar.url} alt="Avatar" />
-          ) : (
-            <FaUserCircle className="avatarIcon" />
+        <div className="avatar-container">
+          <label
+            htmlFor="avatar-file"
+            className={`avatar-label ${isEditing ? 'editing' : ''}`}
+          >
+            {avatar.url ? (
+              <img src={avatar.url} alt="Avatar" />
+            ) : (
+              <FaUserCircle className="avatarIcon" />
+            )}
+          </label>
+          {isEditing && (
+            <input
+              type="file"
+              id="avatar-file"
+              style={{ display: "none" }}
+              onChange={handleAvatarChange}
+            />
           )}
-        </label>
-        <input
-          type="file"
-          id="avatar-file"
-          style={{ display: "none" }}
-          onChange={handleAvatarChange}
-        />
+        </div>
         <h2>{currentUser?.username}</h2>
         <h4>{currentUser?.subname}</h4>
         <h3>{continentNames[currentUser?.continent]}</h3>
@@ -96,22 +118,35 @@ const MainUserInfo = () => {
               onChange={(e) => setPresentation(e.target.value)}
               maxLength="200"
             />
-            <button onClick={handleSavePresentation} disabled={loading}>
-              <FaSave className="icon" />
-              {loading ? "Guardando..." : "Guardar"}
-            </button>
           </div>
         ) : (
-          <p onClick={() => setIsEditing(true)}>{presentation}</p>
+          <p>{presentation}</p>
         )}
+        <div className="button-container">
+          <button onClick={handleEditProfile}>
+            {isEditing ? (
+              <>
+                <FaSave className="icon" />
+                {loading ? "Guardando..." : "Guardar"}
+              </>
+            ) : (
+              <>
+                <FaEdit className="icon" />
+                Editar Perfil
+              </>
+            )}
+          </button>
+          {isEditing && (
+            <button onClick={handleCancelEditing} className="cancel-btn">
+              Cancelar
+            </button>
+          )}
+        </div>
         {error && <p className="error">{error}</p>}
-        <button onClick={handleSaveAvatar} disabled={!avatar.file || loading}>
-          {loading ? "Guardando..." : "Guardar Foto"}
-        </button>
       </div>
       <button className="logout" onClick={() => auth.signOut()}>
-          Salir
-        </button>
+        <IoIosLogOut />
+      </button>
       <UserStories />
     </div>
   );
