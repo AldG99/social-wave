@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FaSmile, FaImage } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, differenceInCalendarDays } from "date-fns";
 import { es } from "date-fns/locale";
 import "../../styles/chat/chat.scss";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -9,6 +9,8 @@ import { db } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
+
+const CHAR_LIMIT = 275;  // Límite de caracteres
 
 const Chat = () => {
   const [chat, setChat] = useState();
@@ -18,6 +20,7 @@ const Chat = () => {
     file: null,
     url: "",
   });
+  const [warning, setWarning] = useState("");
 
   const { currentUser } = useUserStore();
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
@@ -55,8 +58,22 @@ const Chat = () => {
     }
   };
 
+  const handleCancelImg = () => {
+    setImg({
+      file: null,
+      url: ""
+    });
+  };
+
   const handleSend = async () => {
     if (text === "" && !img.file) return;
+
+    if (text.length > CHAR_LIMIT) {
+      setWarning(`El mensaje no puede superar los ${CHAR_LIMIT} caracteres.`);
+      return;
+    }
+
+    setWarning(""); // Clear any previous warnings
 
     let imgUrl = null;
 
@@ -105,13 +122,36 @@ const Chat = () => {
       file: null,
       url: ""
     });
-
     setText("");
   };
 
   const formatTimeAgo = (date) => {
-    const distance = formatDistanceToNow(date, { locale: es });
-    return `hace ${distance}`;
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const daysDifference = differenceInCalendarDays(now, date);
+
+    if (date < oneWeekAgo) {
+      return format(date, "dd/MM/yyyy 'a las' hh:mm a", { locale: es });
+    } else if (daysDifference === 1) {
+      return `ayer a las ${format(date, 'hh:mm a', { locale: es })}`;
+    } else if (daysDifference === 0) {
+      return `hoy a las ${format(date, 'hh:mm a', { locale: es })}`;
+    } else if (daysDifference < 7) {
+      return `${format(date, "eeee 'a las' hh:mm a", { locale: es })}`;
+    } else {
+      const distance = formatDistanceToNow(date, { locale: es });
+      return `${distance} a las ${format(date, 'hh:mm a', { locale: es })}`;
+    }
+  };
+
+  const handleTextChange = (e) => {
+    const newText = e.target.value;
+    if (newText.length <= CHAR_LIMIT) {
+      setText(newText);
+      setWarning("");
+    } else {
+      setWarning(`El mensaje no puede superar los ${CHAR_LIMIT} caracteres.`);
+    }
   };
 
   return (
@@ -139,6 +179,7 @@ const Chat = () => {
           <div className="message own">
             <div className="texts">
               <img src={img.url} alt="" />
+              <button className="cancelButton" onClick={handleCancelImg}>Cancelar</button>
             </div>
           </div>
         )}
@@ -151,7 +192,20 @@ const Chat = () => {
           </label>
           <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} disabled={isCurrentUserBlocked || isReceiverBlocked}/>
         </div>
-        <input type="text" placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "No puedes enviar un mensaje" : "Escribe un mensaje..."} value={text} onChange={(e) => setText(e.target.value)} disabled={isCurrentUserBlocked || isReceiverBlocked} />
+        <input
+          type="text"
+          placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "No puedes enviar un mensaje" : "Escribe un mensaje..."}
+          value={text}
+          onChange={handleTextChange}
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
+        />
+        {warning && <div className="warning">{warning}</div>}
+        {img.url && (
+          <div className="previewMessage">
+            <FaImage className="previewIcon" />
+            <span>Imagen cargada</span>
+          </div>
+        )}
         <div className="emoji">
           <FaSmile className="emojiIcon" onClick={() => setOpen((prev) => !prev)} />
           <div className="picker">

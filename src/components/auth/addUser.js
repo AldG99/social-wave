@@ -1,14 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "../../styles/auth/addUser.scss";
 import { FaQuestionCircle } from "react-icons/fa";
 import { db } from "../../lib/firebaseConfig";
 import { collection, getDocs, query, serverTimestamp, where, doc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useUserStore } from "../../lib/userStore";
 
-const AddUser = () => {
+const AddUser = ({ onClose }) => {
   const [user, setUser] = useState(null);
   const { currentUser } = useUserStore();
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -72,37 +73,47 @@ const AddUser = () => {
     setTooltipVisible(!tooltipVisible);
   };
 
+  const handleClose = () => {
+    setIsVisible(false);
+    onClose(); // Notify parent to close AddUser
+  };
+
   return (
-    <div className="addUser">
-      <form onSubmit={handleSearch}>
-        <span className="omega-code-container">
-          Ingresa el Código Omega del contacto que deseas añadir.
-          <FaQuestionCircle 
-            className="info-icon" 
-            onClick={toggleTooltip} 
-          />
-          {tooltipVisible && (
-            <div className="info-tooltip">
-              <p>¿Qué es el Código Omega?</p>
-              <p>Es una clave única asignada automáticamente a cada contacto al registrarse, facilitando su búsqueda y gestión.</p>
-              <p>¿Dónde encontrarlo?</p>
-              <p>Está ubicado en el perfil, justo debajo del nombre completo.</p>
+    <>
+      {isVisible && (
+        <div className="addUser">
+          <button className="close-btn" onClick={handleClose}>×</button>
+          <form onSubmit={handleSearch}>
+            <span className="omega-code-container">
+              Ingresa el Código Omega del contacto que deseas añadir.
+              <FaQuestionCircle 
+                className="info-icon" 
+                onClick={toggleTooltip} 
+              />
+              {tooltipVisible && (
+                <div className="info-tooltip">
+                  <p>¿Qué es el Código Omega?</p>
+                  <p>Es una clave única asignada automáticamente a cada contacto al registrarse, facilitando su búsqueda y gestión.</p>
+                  <p>¿Dónde encontrarlo?</p>
+                  <p>Está ubicado en el perfil, justo debajo del nombre completo.</p>
+                </div>
+              )}
+            </span>
+            <input type="text" placeholder="XXYY0000-ZZ0000-0000" name="omegaCode" />
+            <button type="submit">Buscar</button>
+          </form>
+          {user && (
+            <div className="user">
+              <div className="detail">
+                <img src={user.avatar} alt="Avatar" />
+                <span>{user.username}</span>
+              </div>
+              <button onClick={handleAdd}>Añadir Usuario</button>
             </div>
           )}
-        </span>
-        <input type="text" placeholder="XXYY0000-ZZ0000-0000" name="omegaCode" />
-        <button type="submit">Buscar</button>
-      </form>
-      {user && (
-        <div className="user">
-          <div className="detail">
-            <img src={user.avatar} alt="Avatar" />
-            <span>{user.username}</span>
-          </div>
-          <button onClick={handleAdd}>Añadir Usuario</button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaPlus, FaMinus } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa6";
 import "../../styles/chat/chatList.scss";
 import AddUser from "../auth/addUser";
 import { useUserStore } from "../../lib/userStore";
@@ -7,11 +8,26 @@ import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 
+const MAX_LENGTH = 30; // Ajusta este valor según tus necesidades
+
+const truncateText = (text, maxLength) => {
+  if (text.length <= maxLength) return text;
+
+  let truncated = text.slice(0, maxLength);
+
+  // Asegúrate de que el texto no termine en medio de una palabra
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+  if (lastSpaceIndex > -1) {
+    truncated = truncated.slice(0, lastSpaceIndex);
+  }
+
+  return truncated + '...';
+};
+
 const ChatList = () => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [input, setInput] = useState("");
-
   const { currentUser } = useUserStore();
   const { changeChat } = useChatStore();
 
@@ -74,11 +90,12 @@ const ChatList = () => {
           <FaSearch className="searchIcon" />
           <input type="text" placeholder="Buscar" onChange={(e) => setInput(e.target.value)} />
         </div>
-        {addMode ? (
-          <FaMinus className="addIcon" onClick={() => setAddMode((prev) => !prev)} />
-        ) : (
-          <FaPlus className="addIcon" onClick={() => setAddMode((prev) => !prev)} />
-        )}
+        <div className="app">
+          <FaUserPlus
+            className={`addIcon ${addMode ? 'active' : ''}`}
+            onClick={() => setAddMode(prev => !prev)}
+          />
+        </div>
       </div>
       <div className="chatListItems">
         {filteredChats.map((chat) => (
@@ -98,14 +115,14 @@ const ChatList = () => {
             />
             <div className="texts">
               <span>{chat.user.blocked.includes(currentUser.id) ? "Usuario" : chat.user.username}</span>
-              <p>{chat.lastMessage}</p>
+              <p>{truncateText(chat.lastMessage, MAX_LENGTH)}</p>
             </div>
           </div>
         ))}
       </div>
-      {addMode && <AddUser />}
+      {addMode && <AddUser onClose={() => setAddMode(false)} />}
     </div>
-  );  
+  );
 };
 
 export default ChatList;
