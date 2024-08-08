@@ -42,7 +42,7 @@ const Detail = ({ onProfileClick }) => {
         <h4>{user?.omegaCode}</h4>
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
-        <button onClick={onProfileClick}>
+        <button className="user-profile-button" onClick={onProfileClick}>
           Perfil de Usuario
         </button>
       </div>

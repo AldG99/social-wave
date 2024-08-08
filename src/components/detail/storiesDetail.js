@@ -62,14 +62,14 @@ const StoriesDetail = ({ stories }) => {
         <button
           className="pagination-button"
           onClick={handlePrevPage}
-          disabled={currentPage === 0}
+          disabled={currentPage === 0 || stories.length === 0} // Deshabilitar si no hay historias
         >
           &lt;
         </button>
         <button
           className="pagination-button"
           onClick={handleNextPage}
-          disabled={currentPage === Math.ceil(stories.length / ITEMS_PER_PAGE) - 1}
+          disabled={currentPage === Math.ceil(stories.length / ITEMS_PER_PAGE) - 1 || stories.length === 0} // Deshabilitar si no hay historias
         >
           &gt;
         </button>
