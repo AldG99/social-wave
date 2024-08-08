@@ -13,14 +13,13 @@
 
 .modal-content {
   position: relative;
-  width: 640px; // Tamaño fijo para el modal
-  height: 720px; // Tamaño fijo para el modal
+  width: 640px; /* Tamaño fijo para el modal */
+  height: 750px; /* Tamaño fijo para el modal */
   background-color: #fff;
-  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
-  flex-direction: column; // Apilar elementos verticalmente
+  flex-direction: column; /* Apilar elementos verticalmente */
 }
 
 .close-button,
@@ -34,10 +33,12 @@
   cursor: pointer;
   padding: 0.5rem;
   transition: background 0.3s ease;
+}
 
-  &:hover {
-    background: rgba(255, 255, 255, 1);
-  }
+.close-button:hover,
+.prev-button:hover,
+.next-button:hover {
+  background: rgba(255, 255, 255, 1);
 }
 
 .close-button {
@@ -68,9 +69,9 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 1rem;
-  background-color: #f9f9f9;
+  background-color: #f6f6f6;
   box-sizing: border-box;
-  height: 35%; // Mantener una altura fija
+  height: 32.5%; /* Mantener una altura fija */
 }
 
 .photo-counter-container {
@@ -79,11 +80,11 @@
 
 .photo-counter {
   font-size: 1rem;
-  color: #333;
+  color: #717171;
 }
 
 .photo-date-container {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .photo-date {
@@ -92,24 +93,28 @@
 }
 
 .photo-title-container {
-  margin-top: 1rem; // Espaciado antes del título
+  margin-top: 0.75rem; /* Espaciado antes del título */
 }
 
 .photo-title {
-  font-size: 1.2rem; // Tamaño del texto del título
+  font-size: 1.2rem; /* Tamaño del texto del título */
   font-weight: bold;
-  color: #333; // Color del texto del título
-  margin-bottom: 0.5rem; // Espaciado debajo del título
+  color: #333; /* Color del texto del título */
+  margin-bottom: 0.5rem; /* Espaciado debajo del título */
 }
 
 .photo-comment-container {
-  margin-top: 1rem;
+  margin-top: 0.1rem;
+  overflow: hidden; /* Evitar desbordamiento */
 }
 
 .photo-comment {
   font-size: 1rem;
   color: #444;
   line-height: 1.5;
+  word-wrap: break-word; /* Ajuste de palabra para evitar desbordamiento horizontal */
+  overflow: hidden; /* Ocultar desbordamiento */
+  white-space: pre-wrap; /* Mantener los espacios en blanco y saltos de línea */
 }
 
 .modal-image-container {
@@ -119,7 +124,7 @@
   align-items: center;
   padding: 1rem;
   overflow: hidden;
-  height: 65%; // Mantener una altura fija
+  height: 65%; /* Mantener una altura fija */
 }
 
 .modal-image {

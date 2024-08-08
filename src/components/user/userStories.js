@@ -22,6 +22,7 @@ const UserStories = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [photoTitle, setPhotoTitle] = useState("");
   const [photoComment, setPhotoComment] = useState("");
+  const [remainingChars, setRemainingChars] = useState(260);
   const [newPhoto, setNewPhoto] = useState(null);
   const [isAddingStory, setIsAddingStory] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -88,9 +89,10 @@ const UserStories = () => {
   const handlePhotoCommentChange = (e) => {
     const comment = e.target.value;
     if (comment.length <= 260) {
-      setPhotoComment(comment);
+        setPhotoComment(comment);
+        setRemainingChars(260 - comment.length);
     } else {
-      alert('El comentario no puede exceder los 260 caracteres.');
+        alert('El comentario no puede exceder los 260 caracteres.');
     }
   };
 
@@ -514,6 +516,9 @@ const UserStories = () => {
                 onChange={handlePhotoCommentChange}
                 className="textarea-comment"
               />
+              <div className="char-counter">
+                Te quedan {remainingChars} caracteres.
+              </div>
               <button
                 onClick={() => newPhoto && addPhotoToStory(selectedStory.id, newPhoto)}
                 disabled={loading}

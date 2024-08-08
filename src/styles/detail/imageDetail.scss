@@ -14,9 +14,8 @@
 .image-modal-content {
   position: relative;
   width: 640px; // Tamaño fijo para el modal
-  height: 720px; // Tamaño fijo para el modal
+  height: 750px; // Tamaño fijo para el modal (ajustado de 720px a 750px)
   background-color: #fff;
-  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -62,9 +61,9 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 1rem;
-  background-color: #f9f9f9;
+  background-color: #f6f6f6; // Ajustado de #f9f9f9 a #f6f6f6
   box-sizing: border-box;
-  height: 35%; // Mantener una altura fija
+  height: 32.5%; // Ajustado de 35% a 32.5%
 }
 
 .image-modal-counter-wrapper {
@@ -73,11 +72,11 @@
 
 .image-modal-counter {
   font-size: 1rem;
-  color: #333;
+  color: #717171; // Ajustado de #333 a #717171
 }
 
 .image-modal-date-wrapper {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem; // Ajustado de 0.5rem a 0.35rem
 }
 
 .image-modal-date {
@@ -86,7 +85,7 @@
 }
 
 .image-modal-title-wrapper {
-  margin-top: 1rem;
+  margin-top: 0.75rem; // Ajustado de 1rem a 0.75rem
 }
 
 .image-modal-title {
@@ -97,13 +96,17 @@
 }
 
 .image-modal-comment-wrapper {
-  margin-top: 1rem;
+  margin-top: 0.1rem; // Ajustado de 1rem a 0.1rem
+  overflow: hidden; // Añadido para evitar desbordamiento
 }
 
 .image-modal-comment {
   font-size: 1rem;
   color: #444;
   line-height: 1.5;
+  word-wrap: break-word; // Ajuste de palabra para evitar desbordamiento horizontal
+  overflow: hidden; // Ocultar desbordamiento
+  white-space: pre-wrap; // Mantener los espacios en blanco y saltos de línea
   max-height: 100px; // Limitar la altura del comentario
 }
 
