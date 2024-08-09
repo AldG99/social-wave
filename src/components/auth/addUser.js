@@ -2,31 +2,31 @@ import React, { useState, useEffect } from "react";
 import "../../styles/auth/addUser.scss";
 import { FaQuestionCircle } from "react-icons/fa";
 import { db } from "../../lib/firebaseConfig";
-import { collection, getDocs, query, serverTimestamp, where, doc, setDoc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, setDoc, getDoc } from "firebase/firestore"; // Asegúrate de importar getDoc
 import { useUserStore } from "../../lib/userStore";
 
 const AddUser = ({ onClose }) => {
   const [user, setUser] = useState(null);
-  const [isUserAdded, setIsUserAdded] = useState(false); // Nuevo estado para verificar si el usuario está agregado
+  const [isRequestSent, setIsRequestSent] = useState(false); // Estado para verificar si la solicitud ha sido enviada
   const { currentUser } = useUserStore();
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Verifica si el usuario ya está en los chats cuando el componente se monta
-    const checkUserAdded = async () => {
+    // Verifica si la solicitud ya ha sido enviada cuando el componente se monta
+    const checkRequestSent = async () => {
       if (user) {
-        const userChatsRef = doc(db, "userchats", currentUser.id);
-        const userChatsSnap = await getDoc(userChatsRef);
-        if (userChatsSnap.exists()) {
-          const chats = userChatsSnap.data().chats || [];
-          const isAdded = chats.some(chat => chat.receiverId === user.id);
-          setIsUserAdded(isAdded);
+        const requestsRef = doc(db, "requests", currentUser.id);
+        const requestsSnap = await getDoc(requestsRef);
+        if (requestsSnap.exists()) {
+          const requests = requestsSnap.data().requests || [];
+          const isSent = requests.some(request => request.receiverId === user.id);
+          setIsRequestSent(isSent);
         }
       }
     };
 
-    checkUserAdded();
+    checkRequestSent();
   }, [user, currentUser.id]);
 
   const handleSearch = async (e) => {
@@ -48,74 +48,25 @@ const AddUser = ({ onClose }) => {
     }
   };
 
-  const handleAdd = async () => {
-    const chatRef = collection(db, "chats");
-    const userChatsRef = collection(db, "userchats");
-
+  const handleSendRequest = async () => {
     try {
-      // Verifica si ya existe un chat con este usuario
-      const existingChatQuery = query(userChatsRef, where("chats.receiverId", "==", user.id));
-      const existingChatSnapshot = await getDocs(existingChatQuery);
+      const requestsRef = doc(db, "requests", user.id);
+      const requestsSnap = await getDoc(requestsRef);
+      let requests = requestsSnap.exists() ? requestsSnap.data().requests : [];
 
-      if (!existingChatSnapshot.empty) {
-        console.log('El chat con este usuario ya existe.');
-        return; // Sal de la función si ya existe un chat
+      const requestExists = requests.some(request => request.senderId === currentUser.id);
+      if (requestExists) {
+        console.log('La solicitud ya ha sido enviada.');
+        return;
       }
 
-      // Crear un nuevo chat
-      const newChatRef = doc(chatRef);
-      await setDoc(newChatRef, {
-        createAt: serverTimestamp(),
-        message: [],
-      });
+      requests.push({ senderId: currentUser.id, requestId: new Date().getTime() });
 
-      console.log('Chat creado:', newChatRef.id);
-
-      // Asegúrate de que los documentos de userchats existen
-      const currentUserChatDoc = doc(userChatsRef, currentUser.id);
-      const userChatDoc = doc(userChatsRef, user.id);
-
-      const currentUserChatSnap = await getDoc(currentUserChatDoc);
-      if (!currentUserChatSnap.exists()) {
-        await setDoc(currentUserChatDoc, {
-          chats: [],
-        });
-      }
-
-      const userChatSnap = await getDoc(userChatDoc);
-      if (!userChatSnap.exists()) {
-        await setDoc(userChatDoc, {
-          chats: [],
-        });
-      }
-
-      // Actualiza los chats de ambos usuarios
-      await updateDoc(currentUserChatDoc, {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: "",
-          receiverId: user.id,
-          updateAt: Date.now(),
-        }),
-      });
-
-      console.log(`Chat añadido a ${user.id}`);
-
-      await updateDoc(userChatDoc, {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: "",
-          receiverId: currentUser.id,
-          updateAt: Date.now(),
-        }),
-      });
-
-      console.log(`Chat añadido a ${currentUser.id}`);
-
-      // Actualiza el estado para indicar que el usuario ya está añadido
-      setIsUserAdded(true);
+      await setDoc(requestsRef, { requests });
+      console.log('Solicitud enviada correctamente.');
+      setIsRequestSent(true);
     } catch (err) {
-      console.error('Error al añadir chat:', err);
+      console.error('Error al enviar la solicitud:', err);
     }
   };
 
@@ -159,10 +110,10 @@ const AddUser = ({ onClose }) => {
                 <span>{user.username}</span>
               </div>
               <button 
-                onClick={handleAdd} 
-                disabled={isUserAdded} // Deshabilita el botón si el usuario ya está agregado
+                onClick={handleSendRequest} 
+                disabled={isRequestSent} // Deshabilita el botón si la solicitud ya ha sido enviada
               >
-                {isUserAdded ? "Ya tienes a este usuario" : "Añadir Usuario"}
+                {isRequestSent ? "Solicitud Enviada" : "Enviar Solicitud"}
               </button>
             </div>
           )}

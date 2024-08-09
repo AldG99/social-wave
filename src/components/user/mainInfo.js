@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserStore } from "../../lib/userStore";
-import { FaSave, FaUserCircle, FaEdit } from "react-icons/fa";
+import { FaSave, FaUserCircle, FaEdit, FaBell } from "react-icons/fa";
 import { IoIosLogOut } from 'react-icons/io';
 import "../../styles/user/mainInfo.scss";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc, arrayUnion, arrayRemove, setDoc, serverTimestamp, collection } from "firebase/firestore";
 import { db, auth } from "../../lib/firebaseConfig";
 import upload from "../../lib/upload";
 import UserStories from "./userStories";
@@ -24,6 +24,21 @@ const MainUserInfo = () => {
   const [avatar, setAvatar] = useState({ file: null, url: currentUser?.avatar || "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [requests, setRequests] = useState([]);
+  const [showRequests, setShowRequests] = useState(false);
+
+  useEffect(() => {
+    // Cargar solicitudes del usuario
+    const loadRequests = async () => {
+      const requestsRef = doc(db, "requests", currentUser.id);
+      const requestsSnap = await getDoc(requestsRef);
+      if (requestsSnap.exists()) {
+        setRequests(requestsSnap.data().requests || []);
+      }
+    };
+
+    loadRequests();
+  }, [currentUser.id]);
 
   const handleSavePresentation = async () => {
     if (presentation.trim().length === 0) {
@@ -84,6 +99,67 @@ const MainUserInfo = () => {
     }
     setIsEditing(!isEditing);
   };
+
+  const handleAcceptRequest = async (requestId, senderId) => {
+    try {
+      // Verifica si el documento de userchats existe para ambos usuarios
+      const currentUserChatDocRef = doc(db, "userchats", currentUser.id);
+      const userChatDocRef = doc(db, "userchats", senderId);
+  
+      const [currentUserChatSnap, userChatSnap] = await Promise.all([
+        getDoc(currentUserChatDocRef),
+        getDoc(userChatDocRef),
+      ]);
+  
+      if (!currentUserChatSnap.exists()) {
+        await setDoc(currentUserChatDocRef, { chats: [] });
+      }
+      if (!userChatSnap.exists()) {
+        await setDoc(userChatDocRef, { chats: [] });
+      }
+  
+      // Crear un nuevo chat
+      const chatRef = doc(collection(db, "chats")); // Crear una referencia válida
+      await setDoc(chatRef, {
+        createAt: serverTimestamp(),
+        message: [],
+      });
+  
+      // Actualizar los chats de ambos usuarios
+      await Promise.all([
+        updateDoc(currentUserChatDocRef, {
+          chats: arrayUnion({
+            chatId: chatRef.id,
+            lastMessage: "",
+            receiverId: senderId,
+            updateAt: Date.now(),
+          }),
+        }),
+        updateDoc(userChatDocRef, {
+          chats: arrayUnion({
+            chatId: chatRef.id,
+            lastMessage: "",
+            receiverId: currentUser.id,
+            updateAt: Date.now(),
+          }),
+        }),
+      ]);
+  
+      // Eliminar la solicitud aceptada
+      const requestsRef = doc(db, "requests", currentUser.id);
+      await updateDoc(requestsRef, {
+        requests: arrayRemove({
+          requestId,
+          senderId,
+        }),
+      });
+  
+      console.log('Solicitud aceptada y chat creado.');
+      setRequests(requests.filter(request => request.requestId !== requestId));
+    } catch (err) {
+      console.error("Error al aceptar solicitud:", err);
+    }
+  };  
 
   return (
     <div className="mainUserInfo">
@@ -147,6 +223,27 @@ const MainUserInfo = () => {
       <button className="logout" onClick={() => auth.signOut()}>
         <IoIosLogOut />
       </button>
+      <div className="requests-container">
+        <button onClick={() => setShowRequests(!showRequests)}>
+          <FaBell /> Solicitudes ({requests.length})
+        </button>
+        {showRequests && (
+          <div className="requests-list">
+            {requests.length === 0 ? (
+              <p>No tienes nuevas solicitudes.</p>
+            ) : (
+              requests.map((request) => (
+                <div key={request.requestId} className="request">
+                  <span>Solicitud de usuario {request.senderId}</span>
+                  <button onClick={() => handleAcceptRequest(request.requestId, request.senderId)}>
+                    Aceptar
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
       <UserStories />
     </div>
   );
