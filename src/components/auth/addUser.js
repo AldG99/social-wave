@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import "../../styles/auth/addUser.scss";
 import { FaQuestionCircle } from "react-icons/fa";
 import { db } from "../../lib/firebaseConfig";
-import { collection, getDocs, query, where, doc, setDoc, getDoc } from "firebase/firestore"; // Asegúrate de importar getDoc
+import { collection, getDocs, query, where, doc, setDoc, getDoc } from "firebase/firestore";
 import { useUserStore } from "../../lib/userStore";
 
 const AddUser = ({ onClose }) => {
   const [user, setUser] = useState(null);
-  const [isRequestSent, setIsRequestSent] = useState(false); // Estado para verificar si la solicitud ha sido enviada
+  const [isRequestSent, setIsRequestSent] = useState(false);
+  const [isAlreadyConnected, setIsAlreadyConnected] = useState(false); // Nuevo estado
   const { currentUser } = useUserStore();
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Verifica si la solicitud ya ha sido enviada cuando el componente se monta
     const checkRequestSent = async () => {
       if (user) {
         const requestsRef = doc(db, "requests", currentUser.id);
@@ -22,6 +22,15 @@ const AddUser = ({ onClose }) => {
           const requests = requestsSnap.data().requests || [];
           const isSent = requests.some(request => request.receiverId === user.id);
           setIsRequestSent(isSent);
+        }
+
+        // Verificar si ya existe un chat entre los usuarios
+        const userChatsRef = doc(db, "userchats", currentUser.id);
+        const userChatsSnap = await getDoc(userChatsRef);
+        if (userChatsSnap.exists()) {
+          const chats = userChatsSnap.data().chats || [];
+          const alreadyConnected = chats.some(chat => chat.receiverId === user.id);
+          setIsAlreadyConnected(alreadyConnected);
         }
       }
     };
@@ -76,7 +85,7 @@ const AddUser = ({ onClose }) => {
 
   const handleClose = () => {
     setIsVisible(false);
-    onClose(); // Notify parent to close AddUser
+    onClose();
   };
 
   return (
@@ -111,9 +120,13 @@ const AddUser = ({ onClose }) => {
               </div>
               <button 
                 onClick={handleSendRequest} 
-                disabled={isRequestSent} // Deshabilita el botón si la solicitud ya ha sido enviada
+                disabled={isRequestSent || isAlreadyConnected} // Deshabilita el botón si ya está conectado o la solicitud está enviada
               >
-                {isRequestSent ? "Solicitud Enviada" : "Enviar Solicitud"}
+                {isAlreadyConnected 
+                  ? "Ya estás conectado"
+                  : isRequestSent 
+                  ? "Solicitud Enviada" 
+                  : "Enviar Solicitud"}
               </button>
             </div>
           )}

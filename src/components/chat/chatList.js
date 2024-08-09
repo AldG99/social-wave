@@ -67,7 +67,8 @@ const ChatList = () => {
 
     const chatIndex = userChats.findIndex((item) => item.chatId === chat.chatId);
 
-    userChats[chatIndex].isSeen = true;
+    userChats[chatIndex].isSeen = true; // Marca el chat como visto
+    userChats[chatIndex].hasNewMessage = false; // Marca el chat como sin nuevos mensajes
 
     const userChatsRef = doc(db, "userchats", currentUser.id);
 
@@ -100,10 +101,10 @@ const ChatList = () => {
       <div className="chatListItems">
         {filteredChats.map((chat) => (
           <div
-            className="item"
+            className={`item ${!chat.isSeen ? 'newMessage' : ''}`} // Aplica la clase newMessage si el chat tiene nuevos mensajes
             key={chat.chatId}
             onClick={() => handleSelect(chat)}
-            style={{ backgroundColor: chat?.isSeen ? "transparent" : "#5183fe" }}
+            style={{ backgroundColor: !chat.isSeen ? "rgb(110, 180, 180)" : "transparent" }} // Color para nuevos mensajes
           >
             <img
               src={

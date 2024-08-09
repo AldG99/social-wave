@@ -151,5 +151,93 @@
   
   .logout:hover svg {
     fill: #b6f1ff;
-  }  
+  }
+
+  .requests-container {
+    margin-top: 20px;
+    
+    button {
+      background-color: #ff9aa2; /* Color de fondo del botón (rosa pastel) */
+      color: white; /* Color del texto del botón */
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #ffb7b2; /* Color al pasar el mouse (rosa más claro) */
+      }
+    }
+
+    .requests-list {
+      margin-top: 10px;
+      padding: 15px;
+      
+      .request {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .request-header {
+          display: flex;
+          align-items: center;
+          
+          .request-avatar {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+
+            img, .avatarIcon {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+          }
+
+          .request-info {
+            span {
+              font-weight: bold;
+              font-size: 16px;
+              color: #333;
+            }
+          }
+        }
+
+        button {
+          background-color: #9aadff; /* Color del botón aceptar (azul pastel) */
+          color: white;
+          padding: 8px 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #b9caff; /* Color del botón al pasar el mouse (azul más claro) */
+          }
+        }
+      }
+
+      p {
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+        margin: 0;
+      }
+    }
+  }
 }

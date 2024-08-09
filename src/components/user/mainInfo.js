@@ -33,7 +33,26 @@ const MainUserInfo = () => {
       const requestsRef = doc(db, "requests", currentUser.id);
       const requestsSnap = await getDoc(requestsRef);
       if (requestsSnap.exists()) {
-        setRequests(requestsSnap.data().requests || []);
+        const requestsData = requestsSnap.data().requests || [];
+
+        // Obtener los detalles de cada remitente
+        const requestsWithDetails = await Promise.all(
+          requestsData.map(async (request) => {
+            const userDoc = await getDoc(doc(db, "users", request.senderId));
+            const senderDetails = userDoc.exists()
+              ? {
+                  senderUsername: userDoc.data().username,
+                  senderAvatar: userDoc.data().avatar,
+                }
+              : {
+                  senderUsername: "Usuario desconocido",
+                  senderAvatar: null,
+                };
+            return { ...request, ...senderDetails };
+          })
+        );
+
+        setRequests(requestsWithDetails);
       }
     };
 
@@ -185,7 +204,6 @@ const MainUserInfo = () => {
           )}
         </div>
         <h2>{currentUser?.username}</h2>
-        <h4>{currentUser?.omegaCode}</h4>
         <h3>{continentNames[currentUser?.continent]}</h3>
         {isEditing ? (
           <div className="presentation-container">
@@ -234,7 +252,18 @@ const MainUserInfo = () => {
             ) : (
               requests.map((request) => (
                 <div key={request.requestId} className="request">
-                  <span>Solicitud de usuario {request.senderId}</span>
+                  <div className="request-header">
+                    <div className="request-avatar">
+                      {request.senderAvatar ? (
+                        <img src={request.senderAvatar} alt="Avatar del remitente" />
+                      ) : (
+                        <FaUserCircle className="avatarIcon" />
+                      )}
+                    </div>
+                    <div className="request-info">
+                      <span>{request.senderUsername}</span>
+                    </div>
+                  </div>
                   <button onClick={() => handleAcceptRequest(request.requestId, request.senderId)}>
                     Aceptar
                   </button>
