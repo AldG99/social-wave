@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FaSmile, FaImage } from "react-icons/fa";
+import { FaSmile } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import { format, formatDistanceToNow, differenceInCalendarDays } from "date-fns";
 import { es } from "date-fns/locale";
@@ -8,7 +8,6 @@ import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firesto
 import { db } from "../../lib/firebaseConfig";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
-import upload from "../../lib/upload";
 
 const CHAR_LIMIT = 275;  // Límite de caracteres
 
@@ -16,10 +15,6 @@ const Chat = () => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
-  const [img, setImg] = useState({
-    file: null,
-    url: "",
-  });
   const [warning, setWarning] = useState("");
 
   const { currentUser } = useUserStore();
@@ -46,27 +41,8 @@ const Chat = () => {
     setOpen(false);
   };
 
-  const handleImg = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setImg({
-        file: file,
-        url: URL.createObjectURL(file),
-      });
-    } else {
-      alert("Por favor, seleccione un archivo de imagen válido");
-    }
-  };
-
-  const handleCancelImg = () => {
-    setImg({
-      file: null,
-      url: ""
-    });
-  };
-
   const handleSend = async () => {
-    if (text === "" && !img.file) return;
+    if (text === "") return;
 
     if (text.length > CHAR_LIMIT) {
       setWarning(`El mensaje no puede superar los ${CHAR_LIMIT} caracteres.`);
@@ -75,18 +51,12 @@ const Chat = () => {
 
     setWarning(""); // Clear any previous warnings
 
-    let imgUrl = null;
-
     try {
-      if (img.file) {
-        imgUrl = await upload(img.file);
-      }
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
           text,
           createAt: new Date(),
-          ...(imgUrl && { img: imgUrl }),
         }),
       });
 
@@ -103,7 +73,7 @@ const Chat = () => {
             const chatIndex = userChatsData.chats.findIndex((c) => c.chatId === chatId);
 
             if (chatIndex !== -1) {
-              userChatsData.chats[chatIndex].lastMessage = text || "Imagen enviada";
+              userChatsData.chats[chatIndex].lastMessage = text;
               userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
               userChatsData.chats[chatIndex].updateAt = Date.now();
 
@@ -118,10 +88,6 @@ const Chat = () => {
       console.log(err);
     }
 
-    setImg({
-      file: null,
-      url: ""
-    });
     setText("");
   };
 
@@ -169,29 +135,14 @@ const Chat = () => {
         {chat?.messages?.map((message) => (
           <div className={message.senderId === currentUser?.id ? "message own" : "message"} key={message?.createAt}>
             <div className="texts">
-              {message.img && <img className="imagen" src={message.img} alt="" />}
               <p>{message.text}</p>
               <span className="time">{formatTimeAgo(new Date(message.createAt.toDate()))}</span>
             </div>
           </div>
         ))}
-        {img.url && (
-          <div className="message own">
-            <div className="texts">
-              <img src={img.url} alt="" />
-              <button className="cancelButton" onClick={handleCancelImg}>Cancelar</button>
-            </div>
-          </div>
-        )}
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
-        <div className="icons">
-          <label htmlFor="file">
-            <FaImage className="icon" />
-          </label>
-          <input type="file" id="file" style={{ display: "none" }} onChange={handleImg} disabled={isCurrentUserBlocked || isReceiverBlocked}/>
-        </div>
         <input
           type="text"
           placeholder={(isCurrentUserBlocked || isReceiverBlocked) ? "No puedes enviar un mensaje" : "Escribe un mensaje..."}
@@ -200,12 +151,6 @@ const Chat = () => {
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
         {warning && <div className="warning">{warning}</div>}
-        {img.url && (
-          <div className="previewMessage">
-            <FaImage className="previewIcon" />
-            <span>Imagen cargada</span>
-          </div>
-        )}
         <div className="emoji">
           <FaSmile className="emojiIcon" onClick={() => setOpen((prev) => !prev)} />
           <div className="picker">
