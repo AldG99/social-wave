@@ -127,7 +127,7 @@ const Chat = () => {
           <img src={user?.avatar} alt="Avatar" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p>{user?.omegaCode}</p>
+            <p>{user?.uid}</p>
           </div>
         </div>
       </div>

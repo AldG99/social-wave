@@ -42,10 +42,12 @@ const MainUserInfo = () => {
             const senderDetails = userDoc.exists()
               ? {
                   senderUsername: userDoc.data().username,
+                  senderUID: userDoc.data().uid,
                   senderAvatar: userDoc.data().avatar,
                 }
               : {
                   senderUsername: "Usuario desconocido",
+                  senderUID: "UID desconocido",
                   senderAvatar: null,
                 };
             return { ...request, ...senderDetails };
@@ -204,6 +206,7 @@ const MainUserInfo = () => {
           )}
         </div>
         <h2>{currentUser?.username}</h2>
+        <h4>{currentUser?.uid}</h4>
         <h3>{continentNames[currentUser?.continent]}</h3>
         {isEditing ? (
           <div className="presentation-container">
@@ -262,6 +265,7 @@ const MainUserInfo = () => {
                     </div>
                     <div className="request-info">
                       <span>{request.senderUsername}</span>
+                      <span>{request.senderUID}</span>
                     </div>
                   </div>
                   <button onClick={() => handleAcceptRequest(request.requestId, request.senderId)}>

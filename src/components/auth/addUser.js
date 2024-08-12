@@ -41,11 +41,11 @@ const AddUser = ({ onClose }) => {
   const handleSearch = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const omegaCode = formData.get("omegaCode");
+    const uid = formData.get("uid");
 
     try {
       const userRef = collection(db, "users");
-      const q = query(userRef, where("omegaCode", "==", omegaCode));
+      const q = query(userRef, where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
@@ -94,22 +94,22 @@ const AddUser = ({ onClose }) => {
         <div className="addUser">
           <button className="close-btn" onClick={handleClose}>×</button>
           <form onSubmit={handleSearch}>
-            <span className="omega-code-container">
-              Ingresa el Código Omega del contacto que deseas añadir.
+            <span className="uid-code-container">
+              Ingresa el UID del contacto que deseas añadir.
               <FaQuestionCircle 
                 className="info-icon" 
                 onClick={toggleTooltip} 
               />
               {tooltipVisible && (
                 <div className="info-tooltip">
-                  <p>¿Qué es el Código Omega?</p>
-                  <p>Es una clave única asignada automáticamente a cada contacto al registrarse, facilitando su búsqueda y gestión.</p>
+                  <p>¿Qué es el UID?</p>
+                  <p>Es el User Identifier asignada automáticamente a cada contacto al registrarse, facilitando su búsqueda y gestión.</p>
                   <p>¿Dónde encontrarlo?</p>
                   <p>Está ubicado en el perfil, justo debajo del nombre completo.</p>
                 </div>
               )}
             </span>
-            <input type="text" placeholder="XXYY0000-ZZ0000-0000" name="omegaCode" />
+            <input type="text" placeholder="XXYY0000-ZZ0000-0000" name="uid" />
             <button type="submit">Buscar</button>
           </form>
           {user && (

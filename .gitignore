@@ -2,10 +2,12 @@
 
 **/src/components/auth/login.js
 **/src/components/auth/register.js
+**/src/components/auth/registerNews.js
 **/src/components/auth/quotes/quotes.js
 
 **/src/styles/auth/login.scss
 **/src/styles/auth/register.scss
+**/src/styles/auth/registerNews.scss
 
 .env
 node_modules

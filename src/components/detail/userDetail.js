@@ -57,7 +57,7 @@ const UserDetail = ({ handleBackToChat }) => {
       <div className="user">
         <img src={user?.avatar} alt="Avatar" />
         <h2>{user?.username}</h2>
-        <h4>{user?.omegaCode}</h4>
+        <h4>{user?.uid}</h4>
         <h3>{continentNames[user?.continent]}</h3>
         <p>{presentation}</p>
         <button onClick={handleBackToChat}>Regresar</button>
