@@ -56,18 +56,6 @@ const UserStories = () => {
     }
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < Math.ceil(stories.length / ITEMS_PER_PAGE) - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
   const currentStories = stories.slice(
     currentPage * ITEMS_PER_PAGE,
     (currentPage + 1) * ITEMS_PER_PAGE
@@ -387,21 +375,14 @@ const UserStories = () => {
           {loading ? 'Guardando...' : 'Guardar Historia'}
         </button>
       </div>
-      <div className="pagination-controls">
-        <button
-          className="pagination-button"
-          onClick={handlePrevPage}
-          disabled={currentPage === 0 || stories.length === 0}  // Deshabilitar si no hay historias
-        >
-          &lt;
-        </button>
-        <button
-          className="pagination-button"
-          onClick={handleNextPage}
-          disabled={currentPage === Math.ceil(stories.length / ITEMS_PER_PAGE) - 1 || stories.length === 0}  // Deshabilitar si no hay historias
-        >
-          &gt;
-        </button>
+      <div className="pagination-dots">
+        {Array.from({ length: Math.ceil(stories.length / ITEMS_PER_PAGE) }).map((_, index) => (
+          <div
+            key={index}
+            className={`dot ${currentPage === index ? 'active' : ''}`}
+            onClick={() => setCurrentPage(index)}
+          ></div>
+        ))}
       </div>
       <div className="stories-container">
         <div className="stories">

@@ -1,29 +1,23 @@
 .hs-newStories {
   margin-top: 10px;
 
-  .pagination-controls {
+  .pagination-dots {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 20px;
-
-    .pagination-button {
-      background: none; // Sin fondo
-      border: none; // Sin borde
-      color: #1effe1; // Color del texto (flechas)
-      font-size: 30px; // Tamaño de la fuente para las flechas
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+  
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.35);
+      margin: 0 5px;
       cursor: pointer;
-      padding: 0; // Sin padding adicional
-      transition: color 0.3s ease;
-
-      &:hover {
-        color: rgb(255, 0, 136); // Color de texto al pasar el cursor
-      }
-
-      &:disabled {
-        color: #b0b0b0; // Color del texto cuando está deshabilitado
-        cursor: not-allowed;
+  
+      &.active {
+        background-color: rgb(255, 235, 210);
       }
     }
   }
