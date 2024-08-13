@@ -36,11 +36,12 @@ const UserStories = () => {
       if (!currentUser?.id) return;
       const userDoc = await getDoc(doc(db, 'users', currentUser.id));
       if (userDoc.exists()) {
-        setStories(userDoc.data().newStories || []);
+        const userStories = userDoc.data().newStories || [];
+        setStories(userStories);
       }
     };
     fetchStories();
-  }, [currentUser]);
+  }, [currentUser]);  
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -89,13 +90,18 @@ const UserStories = () => {
       alert('Por favor, complete todos los campos: portada y nombre de la historia.');
       return;
     }
-
+  
+    if (stories.length >= 40) {
+      alert('Has alcanzado el límite máximo de 40 historias.');
+      return;
+    }
+  
     setLoading(true);
     const date = new Date().toISOString();
     const coverRef = ref(storage, `stories/${currentUser.id}/${date}-${newStoryCover.name}`);
-
+  
     const coverUploadTask = uploadBytesResumable(coverRef, newStoryCover);
-
+  
     coverUploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -128,7 +134,7 @@ const UserStories = () => {
         setIsAddingStory(false);
       }
     );
-  };
+  };  
 
   const addPhotoToStory = async (storyId, newPhoto) => {
     setLoading(true);
@@ -356,6 +362,7 @@ const UserStories = () => {
           style={{ display: 'none' }}
           onChange={handleCoverChange}
         />
+        <p>Actualmente, puedes crear un máximo de 40 historias. Si deseas agregar más historias, asegúrate de eliminar alguna historia existente para cumplir con el límite.</p>
         <label htmlFor="story-cover" className="addStoryLabel">
           <FaPlus /> Portada
         </label>

@@ -10,12 +10,14 @@ import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 
 const CHAR_LIMIT = 275;  // Límite de caracteres
+const MESSAGE_INTERVAL = 2000; // Intervalo mínimo en milisegundos
 
 const Chat = () => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [warning, setWarning] = useState("");
+  const [lastMessageTime, setLastMessageTime] = useState(null);
 
   const { currentUser } = useUserStore();
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore();
@@ -41,11 +43,42 @@ const Chat = () => {
     setOpen(false);
   };
 
+  // Expresión regular mejorada para detectar enlaces
+  const containsURL = (text) => {
+    const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])|(\bwww\.[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
+    return urlPattern.test(text);
+  };
+
+  const containsOffensiveWords = (text) => {
+    const offensiveWords = ["palabra1", "palabra2"]; // Agrega aquí la lista de palabras ofensivas
+    const regex = new RegExp(`\\b(${offensiveWords.join('|')})\\b`, 'i');
+    return regex.test(text);
+  };
+
   const handleSend = async () => {
-    if (text === "") return;
+    if (!text.trim()) {
+      setWarning("El mensaje no puede estar vacío.");
+      return;
+    }
 
     if (text.length > CHAR_LIMIT) {
       setWarning(`El mensaje no puede superar los ${CHAR_LIMIT} caracteres.`);
+      return;
+    }
+
+    if (containsURL(text)) {
+      setWarning("No se permiten enlaces en los mensajes.");
+      return;
+    }
+
+    if (containsOffensiveWords(text)) {
+      setWarning("Tu mensaje contiene palabras ofensivas.");
+      return;
+    }
+
+    const now = new Date().getTime();
+    if (lastMessageTime && now - lastMessageTime < MESSAGE_INTERVAL) {
+      setWarning("Debes esperar antes de enviar otro mensaje.");
       return;
     }
 
@@ -84,6 +117,8 @@ const Chat = () => {
           }
         }
       });
+
+      setLastMessageTime(now); // Update the last message time
     } catch (err) {
       console.log(err);
     }
