@@ -9,7 +9,6 @@ import RegisterNews from "./components/auth/registerNews";
 import Chat from "./components/chat/chat";
 import Detail from "./components/detail/detail";
 import List from "./components/chat/list";
-import Notification from "./components/notification/notification";
 import MainInfo from "./components/user/mainInfo";
 import UserDetail from "./components/detail/userDetail";
 
@@ -101,9 +100,6 @@ const App = () => {
               <Login toggleRegister={toggleRegister} toggleRegisterNews={toggleRegisterNews} />
             )
           )}
-
-          {/* Mostrar notificaciones siempre */}
-          <Notification />
         </>
       )}
     </div>
