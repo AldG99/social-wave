@@ -15,9 +15,8 @@ body {
   justify-content: center;
   height: 100vh;
   color: white;
-  background: 
-    linear-gradient(rgba(255, 127, 80, 0.3), rgba(255, 127, 80, 0.3)),
-    linear-gradient(to bottom, #483D8B, #ffb265);
+  background: linear-gradient(rgba(34, 193, 195, 0.3), rgba(34, 193, 195, 0.3)),
+    linear-gradient(to bottom, #2e8b57, #1e90ff);
   background-size: cover;
 }
 

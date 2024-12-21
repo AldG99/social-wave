@@ -1,6 +1,11 @@
 .detail {
   flex: 1;
-  background-color: rgba(250, 210, 170, 0.35);
+  background-color: rgba(
+    210,
+    240,
+    255,
+    0.35
+  ); /* Azul pastel suave de fondo para el contenedor */
 
   .user {
     padding: 30px 20px;
@@ -20,24 +25,26 @@
       font-size: 24px;
       font-weight: bold;
       margin: 2px 0;
+      color: #4d6a8c; /* Azul oscuro pastel para el título */
     }
 
     h3 {
       font-size: 20px;
       font-weight: normal;
       margin: 10px 0;
+      color: #7a9bbf; /* Azul pastel claro para subtítulos */
     }
 
     h4 {
       font-size: 14px;
       font-weight: normal;
-      color: #fff6edca;
+      color: #a1c5e8; /* Azul muy suave para el texto adicional */
       margin: 2px 0;
     }
 
     .user-profile-button {
-      background-color: #ff9aa2; /* Rosa pastel */
-      color: #ffffff; /* Blanco puro */
+      background-color: #a1c5e8; /* Azul pastel para el botón */
+      color: #ffffff; /* Blanco puro para el texto */
       border: none;
       padding: 10px 20px;
       font-size: 16px;
@@ -45,28 +52,28 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.2s ease;
-    
+
       &:hover {
-        background-color: #f8c6c8; /* Rosa claro pastel */
+        background-color: #8fa3bf; /* Azul pastel más oscuro en hover */
         transform: translateY(-2px);
       }
-    
+
       &:active {
-        background-color: #f5a9b8; /* Rosa más oscuro pastel */
+        background-color: #7f9fbf; /* Azul pastel más intenso en click */
         transform: translateY(1px);
       }
-    
+
       &:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.5); /* Resplandor rosa claro pastel */
+        box-shadow: 0 0 0 3px rgba(100, 150, 200, 0.5); /* Resplandor azul pastel claro */
       }
-    
+
       &:disabled {
-        background-color: #e0e0e0; /* Gris pastel */
+        background-color: #e0e0e0; /* Gris pastel para el botón deshabilitado */
         cursor: not-allowed;
         opacity: 0.7;
       }
-    }    
+    }
   }
 
   .info {
@@ -76,7 +83,6 @@
     gap: 25px;
 
     .option {
-
       .title {
         display: flex;
         align-items: center;
@@ -84,6 +90,7 @@
 
         .arrowIcon {
           cursor: pointer;
+          color: #7a9bbf; /* Azul pastel claro para el ícono de la flecha */
         }
       }
 
@@ -112,7 +119,7 @@
 
             span {
               font-size: 14px;
-              color: lightgray;
+              color: #a1c5e8; /* Azul suave para el texto */
               font-weight: 300;
             }
           }
@@ -120,6 +127,7 @@
           .downloadIcon {
             font-size: 1em;
             cursor: pointer;
+            color: #7a9bbf; /* Azul pastel claro para el ícono de descarga */
           }
         }
       }

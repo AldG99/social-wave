@@ -7,17 +7,17 @@
     margin-top: 10px;
     margin-bottom: 10px;
     transition: background-color 0.3s ease;
-  
+
     .dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.35);
+      background-color: rgba(255, 255, 255, 0.35); /* Color de fondo suave */
       margin: 0 5px;
       cursor: pointer;
-  
+
       &.active {
-        background-color: rgb(255, 235, 210);
+        background-color: rgb(168, 210, 255); /* Azul pastel claro */
       }
     }
   }
@@ -27,47 +27,47 @@
 
     .hs-stories {
       display: flex;
-      grid-template-columns: repeat(6, 1fr); // Asegura 6 ítems por fila
-      gap: 20px 20px; // Espacio entre las filas y columnas
+      grid-template-columns: repeat(6, 1fr); /* 6 elementos por fila */
+      gap: 20px 20px; /* Espacio entre las filas y columnas */
       justify-content: center;
     }
-  
+
     .hs-story {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 8px;
-      width: 90px; // Ajuste de ancho
-      height: 110px; // Ajuste de altura
+      width: 90px; /* Ajuste de ancho */
+      height: 110px; /* Ajuste de altura */
       text-align: center;
       position: relative;
       overflow: hidden;
       transition: transform 0.3s ease;
-  
+
       &:hover {
         transform: scale(1.1);
         z-index: 1;
       }
-  
+
       .hs-story-image-container {
         width: 80%;
-        height: 65px; // Ajuste de altura
+        height: 65px; /* Ajuste de altura */
         overflow: hidden;
-        border-radius: 12px; // Ajuste del borde redondeado
+        border-radius: 12px; /* Bordes redondeados */
         cursor: pointer;
-  
+
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
       }
-  
+
       .hs-story-name {
         margin-top: 8px;
         padding: 4px 0;
-        color: #fdf8f2;
+        color: #fdf8f2; /* Color del texto */
         font-size: 15px;
         border-radius: 4px;
         width: 100%;
@@ -76,13 +76,14 @@
     }
   }
 
-  .addStory, .addPhotoLabel {
+  .addStory,
+  .addPhotoLabel {
     cursor: pointer;
     font-size: 24px;
-    color: #555;
+    color: #3c5c8c; /* Azul oscuro pastel para los íconos */
   }
 
-  .addStory input[type="text"] {
+  .addStory input[type='text'] {
     margin-bottom: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -95,13 +96,13 @@
     padding: 4px 8px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #4bbcf4; /* Azul pastel para el botón */
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: #3c92bf; /* Azul medio pastel al hacer hover */
     }
   }
 
@@ -112,53 +113,54 @@
     transform: translate(-50%, -50%);
     padding: 20px;
     border-radius: 12px;
-    background-color: #fae3d9; // Color de fondo principal
+    background-color: #fae3d9; /* Fondo suave color pastel */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     max-width: 600px;
     width: 90%;
     z-index: 10;
-  
+
     h4 {
       margin-bottom: 10px;
       font-size: 24px;
-      color: #61c0bf; // Color del texto principal
+      color: #61c0bf; /* Azul claro para el título */
       font-weight: 600;
     }
-  
-    input[type="text"] {
+
+    input[type='text'] {
       margin-bottom: 10px;
-      border: 1px solid #4bbcf4; // Borde azul claro
+      border: 1px solid #4bbcf4; /* Borde azul claro */
       border-radius: 8px;
       padding: 8px;
       width: calc(100% - 16px);
       font-size: 16px;
       transition: border-color 0.3s;
-  
+
       &:focus {
-        border-color: #61c0bf; // Borde verde claro al hacer foco
+        border-color: #61c0bf; /* Borde azul claro al hacer foco */
         outline: none;
       }
     }
-  
-    .editCoverLabel, .addPhotoLabel {
+
+    .editCoverLabel,
+    .addPhotoLabel {
       cursor: pointer;
       font-size: 18px;
-      color: #ffb6b9; // Rosa claro
+      color: #f8b7c4; /* Rosa claro */
       margin-top: 10px;
       display: block;
       text-align: center;
       transition: color 0.3s;
-  
+
       &:hover {
-        color: #fae3d9; // Color más claro al hacer hover
+        color: #fae3d9; /* Color más claro al hacer hover */
       }
     }
-  
+
     .hs-photos {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-  
+
       .hs-photo-container {
         position: relative;
         width: 100%;
@@ -166,7 +168,7 @@
         padding-top: 100%;
         overflow: hidden;
         cursor: pointer;
-  
+
         img {
           position: absolute;
           top: 0;
@@ -176,51 +178,51 @@
           object-fit: cover;
           border-radius: 4px;
         }
-  
+
         .photo-date {
           position: absolute;
           bottom: 4px;
           left: 4px;
           font-size: 12px;
           color: #fff;
-          background: rgba(75, 188, 244, 0.9); // Azul claro
+          background: rgba(75, 188, 244, 0.9); /* Azul claro */
           border-radius: 4px;
           padding: 2px 6px;
         }
-  
+
         .delete-photo-button {
           position: absolute;
           top: 4px;
           right: 4px;
-          background: rgba(255, 0, 0, 0.8); // Rojo para el botón de eliminación
+          background: rgba(255, 0, 0, 0.8); /* Rojo pastel para el botón */
           color: #fff;
           border: none;
           border-radius: 50%;
           cursor: pointer;
           padding: 4px;
           transition: background 0.3s;
-  
+
           &:hover {
             background: rgba(200, 0, 0, 0.8);
           }
         }
       }
     }
-  
+
     button {
       margin-top: 10px;
       padding: 10px 20px;
       border: none;
       border-radius: 8px;
-      background-color: #4bbcf4; // Azul claro para el botón
+      background-color: #4bbcf4; /* Azul claro para el botón */
       color: #fff;
       cursor: pointer;
       font-size: 16px;
       transition: background-color 0.3s;
-  
+
       &:hover {
-        background-color: #61c0bf; // Verde claro al hacer hover
+        background-color: #61c0bf; /* Verde claro al hacer hover */
       }
     }
-  } 
+  }
 }

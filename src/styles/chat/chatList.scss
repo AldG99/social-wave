@@ -1,31 +1,41 @@
 .chatList {
   flex: 1;
   display: flex;
-  flex-direction: column; // Asegura que los elementos se apilen verticalmente
+  flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
   overflow-y: auto;
-  background-color: rgba(145, 110, 200, 0.35);
+  background-color: rgba(
+    200,
+    220,
+    255,
+    0.35
+  ); /* Azul pastel suave para el fondo */
 
   .search {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background-color: rgba(125, 115, 140, 0.05);
+    background-color: rgba(
+      190,
+      210,
+      255,
+      0.05
+    ); /* Azul muy suave para la barra de búsqueda */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0; // Evita que el contenedor de búsqueda se reduzca
+    flex-shrink: 0; /* Evita que el contenedor de búsqueda se reduzca */
 
     .searchBar {
       flex: 1;
       display: flex;
       align-items: center;
-      background-color: #e9ecef;
+      background-color: #e9ecef; /* Gris muy suave */
       padding: 0.5rem 1rem;
       border-radius: 1.5rem;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
       .searchIcon {
         font-size: 1rem;
-        color: #6c757d;
+        color: #6c757d; /* Gris oscuro para el ícono de búsqueda */
       }
 
       input {
@@ -40,31 +50,41 @@
 
     .addIcon {
       font-size: 1.4rem;
-      color: #15bed8;
+      color: #8abfff; /* Azul pastel para el ícono de añadir */
       cursor: pointer;
       transition: color 0.2s;
 
       &:hover {
-        color: #14a7be;
+        color: #6fa6e5; /* Azul pastel más oscuro en hover */
       }
     }
   }
 
   .chatListItems {
-    flex: 1; // Esto asegura que la lista de chats ocupe el espacio restante
-    overflow-y: scroll; // Activa el desplazamiento vertical para la lista de chats
-    background-color: rgba(145, 110, 200, 0.35);
+    flex: 1; /* Esto asegura que la lista de chats ocupe el espacio restante */
+    overflow-y: scroll; /* Activa el desplazamiento vertical para la lista de chats */
+    background-color: rgba(
+      200,
+      220,
+      255,
+      0.35
+    ); /* Azul pastel para la lista de chats */
 
     &::-webkit-scrollbar {
       width: 5px;
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.20);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: rgba(175, 100, 110, 0.5);
+      background-color: rgba(
+        150,
+        180,
+        210,
+        0.5
+      ); /* Azul pastel en el thumb del scrollbar */
     }
 
     .item {
@@ -75,14 +95,24 @@
       cursor: pointer;
       border-bottom: 1px solid rgba(220, 190, 225, 0.195);
       transition: background-color 0.2s;
-      overflow: hidden; // Asegura que el contenido no desborde el contenedor
+      overflow: hidden; /* Asegura que el contenido no desborde el contenedor */
 
       &.newMessage {
-        background-color: rgb(110, 180, 180); // Color de fondo para chats con nuevos mensajes
+        background-color: rgba(
+          110,
+          180,
+          180,
+          0.35
+        ); /* Azul pastel suave para chats con nuevos mensajes */
       }
 
       &:hover {
-        background-color: #f1f1f1;
+        background-color: rgba(
+          230,
+          240,
+          255,
+          0.5
+        ); /* Azul muy suave en hover */
       }
 
       img {
@@ -97,28 +127,28 @@
         flex-direction: column;
         gap: 0.25rem;
         max-width: 100%;
-        overflow: hidden; // Asegura que el texto no desborde el contenedor
+        overflow: hidden; /* Asegura que el texto no desborde el contenedor */
 
         span {
           font-weight: 500;
-          color: #fff6ed;
+          color: #d3e6f7; /* Azul claro para el nombre */
         }
 
         p {
           font-size: 0.875rem;
           font-weight: 300;
-          color: #fdecda;
-          white-space: nowrap; // Evita que el texto se rompa en múltiples líneas
-          overflow: hidden; // Oculta el texto que excede el contenedor
-          text-overflow: ellipsis; // Añade "..." al final del texto si se desborda
-          max-width: 200px; // Ajusta según el diseño deseado
+          color: #e9f5ff; /* Azul muy suave para el mensaje */
+          white-space: nowrap; /* Evita que el texto se rompa en múltiples líneas */
+          overflow: hidden; /* Oculta el texto que excede el contenedor */
+          text-overflow: ellipsis; /* Añade "..." al final del texto si se desborda */
+          max-width: 200px; /* Ajusta según el diseño deseado */
         }
       }
     }
   }
 
-  // Opcional: estilos adicionales para el componente AddUser
+  /* Opcional: estilos adicionales para el componente AddUser */
   .addUser {
-    flex-shrink: 0; // Evita que AddUser se reduzca si es necesario
+    flex-shrink: 0; /* Evita que AddUser se reduzca si es necesario */
   }
 }
